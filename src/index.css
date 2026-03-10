@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .clip-pill {
+    clip-path: inset(0 round 9999px);
+  }
+}
+
+@layer base {
+  body {
+    @apply text-charcoal font-sans antialiased overflow-x-hidden;
+    margin: 0;
+    background-color: #000;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-outfit tracking-tight;
+  }
+  
+  .font-concept {
+    @apply font-serif italic font-normal tracking-wide;
+  }
+  
+  .font-metrics {
+    @apply font-mono text-sm uppercase tracking-widest;
+  }
+}
+
+/* Custom Scrollbar for a more premium feel */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-charcoal;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-moss rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-clay;
+}
+
+/* Utility to hide scrollbar but keep functionality */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
