@@ -98,10 +98,10 @@ export default function Shop() {
 
                 <div className="mt-20">
                     <Link
-                        to="/shop"
+                        to="/personalizacion"
                         className="inline-flex items-center gap-2 font-semibold text-charcoal hover:text-clay transition-colors"
                     >
-                        Ver colección completa <span className="text-xl">→</span>
+                        Ver catálogo completo <span className="text-xl">→</span>
                     </Link>
                 </div>
             </div>

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Outlet, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import FloatingButtons from './components/FloatingButtons';
@@ -19,10 +19,13 @@ import PendingPage from './pages/PendingPage';
 
 // Main layout with Header and Footer
 const MainLayout = () => {
+  const { pathname } = useLocation();
+  const isHome = pathname === '/';
   return (
     <>
       <Navbar />
-      <div className="w-full relative overflow-hidden bg-cream min-h-screen">
+      {/* bg-black on Home so Hero section has no cream gap; bg-cream on all other pages */}
+      <div className={`w-full relative overflow-hidden min-h-screen ${isHome ? 'bg-black' : 'bg-cream'}`}>
         <Outlet />
       </div>
       <Footer />

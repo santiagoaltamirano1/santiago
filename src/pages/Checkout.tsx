@@ -1,4 +1,4 @@
-import { useState, FormEvent } from 'react';
+import { useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import { ShieldCheck, ArrowLeft, CreditCard, Truck, CheckCircle2 } from 'lucide-react';
@@ -25,7 +25,8 @@ export default function Checkout() {
         apellidos: '',
         direccion: '',
         ciudad: '',
-        codigoPostal: ''
+        codigoPostal: '',
+        telefono: ''
     });
 
     const [shippingOption, setShippingOption] = useState<'standard' | 'express'>('standard');
@@ -78,24 +79,25 @@ export default function Checkout() {
         trackCheckoutStep(3, 'Confirmar_Pago');
 
         try {
-            // Generating title for the whole order
             const orderTitle = `Orden Stanley (${cart.length} items)`;
 
             const response = await fetch('/api/checkout', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     title: orderTitle,
-                    price: finalTotal
+                    price: finalTotal,
+                    // Datos enriquecidos del cliente para estudio de mercado
+                    customer_name: `${formData.nombre} ${formData.apellidos}`.trim(),
+                    customer_email: formData.email,
+                    shipping_address: `${formData.direccion}, ${formData.ciudad} ${formData.codigoPostal}`.trim(),
+                    customer_phone: formData.telefono,
                 })
             });
 
             const data = await response.json();
 
             if (response.ok && data.init_point) {
-                // Redirect user to Mercado Pago checkout
                 window.location.href = data.init_point;
             } else {
                 throw new Error(data.error || 'Error al generar preferencia de pago');
@@ -128,7 +130,8 @@ export default function Checkout() {
                 {step === 1 && (
                     <form className="max-w-xl w-full flex-1 animate-fade-in" onSubmit={handleInfoSubmit}>
                         <h2 className="text-2xl font-outfit uppercase tracking-tight text-charcoal mb-6">Información de Contacto</h2>
-                        <input required type="email" name="email" value={formData.email} onChange={handleInputChange} placeholder="Correo electrónico" className="w-full p-4 mb-8 bg-white border border-charcoal/20 rounded-xl font-sans focus:outline-none focus:border-moss transition-colors" />
+                        <input required type="email" name="email" value={formData.email} onChange={handleInputChange} placeholder="Correo electrónico" className="w-full p-4 mb-4 bg-white border border-charcoal/20 rounded-xl font-sans focus:outline-none focus:border-moss transition-colors" />
+                        <input required type="tel" name="telefono" value={formData.telefono} onChange={handleInputChange} placeholder="Teléfono (ej. 3001234567)" className="w-full p-4 mb-8 bg-white border border-charcoal/20 rounded-xl font-sans focus:outline-none focus:border-moss transition-colors" />
 
                         <h2 className="text-2xl font-outfit uppercase tracking-tight text-charcoal mb-6">Dirección de Envío</h2>
                         <div className="grid grid-cols-2 gap-4 mb-4">

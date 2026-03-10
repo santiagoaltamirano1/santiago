@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import { getProductImage } from '../data/products';
 import ImageSafe from '../components/ImageSafe';
+import { supabase } from '../lib/supabase';
 
 // --- Quiz Configuration ---
 interface Answer {
@@ -82,7 +83,7 @@ export default function Quiz() {
     const [state, setState] = useState<QuizState>('intro');
     const [currentQ, setCurrentQ] = useState(0);
     const [scores, setScores] = useState<Record<string, number>>({});
-    // const [quizData, setQuizData] = useState<Record<string, string>>({}); // Removed to fix TS6133
+    const [answers, setAnswers] = useState<Record<string, string>>({}); // guarda label por pregunta
     const [animating, setAnimating] = useState(false);
 
     const { products, addToCart } = useStore();
@@ -93,8 +94,10 @@ export default function Quiz() {
         if (animating) return;
         setAnimating(true);
 
-        // Record quiz data for future backend
-        // setQuizData(prev => ({ ...prev, [qId]: answer.label }));
+        // Track answer label by question id
+        const qId = QUESTIONS[currentQ].id;
+        const newAnswers = { ...answers, [qId]: answer.label };
+        setAnswers(newAnswers);
 
         // Accumulate scores
         const newScores = { ...scores };
@@ -108,6 +111,19 @@ export default function Quiz() {
                 setCurrentQ(q => q + 1);
                 setAnimating(false);
             } else {
+                // Determine winner now (same logic as render-time)
+                const winnerSlug = Object.entries(newScores).sort((a, b) => b[1] - a[1])[0]?.[0]
+                    ?? 'quencher-protour';
+
+                // Fire-and-forget: guardar lead en Supabase sin bloquear la UI
+                supabase.from('quiz_leads').insert({
+                    recommended_product: winnerSlug,
+                    answers: newAnswers,
+                }).then(({ error }) => {
+                    if (error) console.warn('Quiz lead not saved:', error.message);
+                    else console.log('Quiz lead saved:', winnerSlug);
+                });
+
                 setState('result');
                 setAnimating(false);
             }
@@ -117,7 +133,7 @@ export default function Quiz() {
     function restart() {
         setCurrentQ(0);
         setScores({});
-        // setQuizData({});
+        setAnswers({});
         setState('intro');
     }
 

@@ -9,7 +9,14 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { title, price } = req.body;
+    const {
+      title,
+      price,
+      customer_name,
+      customer_email,
+      shipping_address,
+      customer_phone,
+    } = req.body;
 
     if (!title || !price) {
       return res.status(400).json({ error: 'Missing title or price' });
@@ -25,10 +32,18 @@ export default async function handler(req, res) {
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Paso Crítico 1: Insertar nuevo registro en 'orders' con status 'pending'
+    // Insertar orden con datos enriquecidos del cliente
     const { data: orderData, error: insertError } = await supabase
       .from('orders')
-      .insert([{ product_title: title, price: Number(price), status: 'pending' }])
+      .insert([{
+        product_title: title,
+        price: Number(price),
+        status: 'pending',
+        customer_name: customer_name ?? null,
+        customer_email: customer_email ?? null,
+        shipping_address: shipping_address ?? null,
+        customer_phone: customer_phone ?? null,
+      }])
       .select('id')
       .single();
 
@@ -50,7 +65,7 @@ export default async function handler(req, res) {
 
     const host = req.headers.origin || `https://${req.headers.host}`;
 
-    // Paso Crítico 2: Crear preferencia en MP
+    // Crear preferencia en MP
     const prefResult = await preference.create({
       body: {
         items: [
@@ -61,6 +76,11 @@ export default async function handler(req, res) {
             unit_price: Number(price),
           }
         ],
+        payer: {
+          name: customer_name ?? undefined,
+          email: customer_email ?? undefined,
+          phone: customer_phone ? { number: customer_phone } : undefined,
+        },
         external_reference: orderId,
         notification_url: `${host}/api/webhook`,
         back_urls: {
@@ -78,7 +98,7 @@ export default async function handler(req, res) {
       .update({ mp_preference_id: prefResult.id })
       .eq('id', orderId);
 
-    // Responder al frontend HTTP 200 con { init_point: URL }
+    // Responder al frontend con { init_point: URL }
     res.status(200).json({ init_point: prefResult.init_point });
 
   } catch (error) {
