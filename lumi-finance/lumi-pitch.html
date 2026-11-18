@@ -266,6 +266,31 @@ html,body{height:100%;background:#07040F;overflow:hidden;font-family:var(--sans)
 .front .tel{font:800 22px var(--display);color:var(--lime);letter-spacing:-.01em}
 .shadow{position:absolute;bottom:20px;left:50%;width:460px;height:60px;margin-left:-230px;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.6),transparent)}
 
+
+/* ===== La nota del celular ===== */
+.s10{display:grid;grid-template-columns:1fr 520px;gap:70px;align-items:center}
+.s10 .h{font-size:104px}
+.s10 .h span{display:block;color:var(--coral-deep)}
+.s10 p.sub{font-size:32px;font-weight:600;color:var(--ink-2);margin-top:28px;max-width:16em;line-height:1.3}
+.s10 p.sub b{color:var(--ink)}
+.s10 .whisper{font-size:36px;color:var(--coral-deep);margin-top:20px}
+.notewrap{position:relative}
+.note{background:#FFFDF6;border-radius:40px;padding:30px 34px 36px;box-shadow:0 0 0 12px #1A1030,0 50px 100px -40px rgba(26,16,48,.6);font-family:-apple-system,"Segoe UI",Roboto,var(--sans);color:#2A2433;transform:rotate(-2deg);transition:filter 1s ease,opacity 1s ease}
+.nbar{display:flex;justify-content:space-between;color:#D49A1A;font-weight:600;font-size:22px}
+.ndate{text-align:center;font-size:15px;color:#9A93A6;margin:16px 0 8px}
+.ntitle{font-size:34px;font-weight:800;margin-bottom:12px}
+.nlines{list-style:none;display:grid;gap:4px}
+.nlines li{font-size:25px;line-height:1.5;padding-bottom:6px;border-bottom:1px solid #F1EBDD}
+.nlines li b{font-weight:700}
+.nlines s{color:#9A93A6}
+.stampN{position:absolute;right:-26px;bottom:60px;transform:rotate(-8deg);border:5px solid var(--coral-deep);color:var(--coral-deep);border-radius:16px;padding:12px 20px;font:800 22px var(--sans);text-transform:uppercase;letter-spacing:.06em;line-height:1.15;background:rgba(255,243,234,.9);text-align:center}
+.stampN b{font:800 34px var(--display);letter-spacing:-.02em;text-transform:none}
+.s10 .note{filter:grayscale(.85);opacity:.6}
+.s10.play .note{animation:dust 1s ease both 3.2s}
+@keyframes dust{from{filter:none;opacity:1}}
+.s10.play .nlines li{animation:lineIn .35s ease both;animation-delay:calc(.4s + var(--i)*.34s)}
+.s10.play .stampN{animation:stamp .5s cubic-bezier(.3,1.6,.5,1) both 3.6s}
+
 /* ---------- Ayudas ---------- */
 .notes{position:fixed;left:16px;right:16px;bottom:16px;z-index:30;max-height:34vh;overflow:auto;background:rgba(7,4,15,.95);color:var(--on-dark);border:1px solid rgba(212,255,94,.4);border-radius:16px;padding:18px 22px;font:500 17px/1.5 var(--sans);display:none}
 .notes.show{display:block} .notes b{color:var(--lime)}
@@ -349,7 +374,7 @@ html,body{height:100%;background:#07040F;overflow:hidden;font-family:var(--sans)
 </section>
 
 <!-- 3 · 5 DE CADA 10 -->
-<section class="slide dark s3" data-theme="dark" data-steps="0" data-notes="<b>El dato (15 s).</b> «Juan no es el único: 5 de cada 10 jóvenes en Colombia no sabe hacer un presupuesto». Baja el tono: «No es falta de ganas. Es que anotar da pereza». Esa frase te lleva a la solución.">
+<section class="slide dark s3" data-theme="dark" data-steps="0" data-notes="<b>El dato (15 s).</b> «Juan no es el único: 5 de cada 10 jóvenes en Colombia no sabe hacer un presupuesto». Baja el tono: «Y no es falta de ganas…». Deja la frase abierta: la siguiente diapositiva la responde.">
   <div class="brand"><svg><use href="#logo"/></svg><b>lumi</b><small>FINANCE</small></div>
   <div class="z">
     <div class="big">5 <span>de cada</span> 10</div>
@@ -358,13 +383,41 @@ html,body{height:100%;background:#07040F;overflow:hidden;font-family:var(--sans)
       <svg class="off"><use href="#helmet"/></svg><svg class="off"><use href="#helmet"/></svg><svg class="off"><use href="#helmet"/></svg><svg class="off"><use href="#helmet"/></svg><svg class="off"><use href="#helmet"/></svg>
     </div>
     <p>jóvenes en Colombia no sabe hacer un presupuesto.</p>
-    <p class="whisper">Juan tampoco. No es falta de ganas: anotar da pereza.</p>
+    <p class="whisper">Juan tampoco. Y no es falta de ganas.</p>
   </div>
   <div class="src">Fuente: Encuesta de Calidad de Vida 2025, citada por Forbes Colombia (más del 50 % de los jóvenes no sabe hacer un presupuesto).</div>
 </section>
 
-<!-- 4 · DI EN QUÉ GASTASTE -->
-<section class="slide dark" data-theme="dark" data-steps="0" data-notes="<b>La solución (15 s).</b> Di solo la frase: «Di en qué gastaste. Lumi lo anota por ti». Deja que el celular hable. Si tienes el video real de la app, guárdalo como <b>demo-app.mp4</b> junto a este archivo y aparece aquí solo.">
+<!-- 4 · LA NOTA DEL CELULAR -->
+<section class="slide light s10" id="sNote" data-theme="light" data-steps="0" data-notes="<b>El momento «ese soy yo» (20 s).</b> Pregunta al público: «¿Quién tiene una nota así en el celular?» y levanta tú la mano primero. Mientras la nota se llena: «Lo que me llegó, lo que debo, quién me debe…». Cuando la nota se apaga: «…y a la semana, abandonada. No es que no quieras: anotar así es pesado». Esa frase te lleva directo a la solución.">
+  <div class="brand"><svg><use href="#logo"/></svg><b>lumi</b><small>FINANCE</small></div>
+  <div>
+    <span class="kicker">Lo intentaste, ¿cierto?</span>
+    <h2 class="h" style="margin-top:22px">Todos tenemos <span>esta nota.</span></h2>
+    <p class="sub">Lo que me llegó, lo que debo, quién me debe… y a la semana, <b>abandonada</b>.</p>
+    <p class="whisper">No es que no quieras. Es que anotar así es pesado.</p>
+  </div>
+  <div class="notewrap">
+    <div class="note">
+      <div class="nbar"><span>‹ Notas</span><span>···</span></div>
+      <div class="ndate">12 de octubre, 7:42 a. m.</div>
+      <div class="ntitle">Plata 💸 (no borrar)</div>
+      <ul class="nlines">
+        <li style="--i:0">Me llegó 420 de la semana</li>
+        <li style="--i:1">gasolina 15 · almuerzo 12</li>
+        <li style="--i:2">Le debo a Andrés 20 mil</li>
+        <li style="--i:3"><b>Camilo me debe 35</b> ← cobrarle!!</li>
+        <li style="--i:4"><s>recarga 10</s> ¿o fueron 15?</li>
+        <li style="--i:5">cuota del celular ??</li>
+        <li style="--i:6">tintos…</li>
+      </ul>
+    </div>
+    <div class="stampN">Última edición:<br><b>hace 23 días</b></div>
+  </div>
+</section>
+
+<!-- 5 · DI EN QUÉ GASTASTE -->
+<section class="slide dark" id="sDemo" data-theme="dark" data-steps="0" data-notes="<b>La solución (15 s).</b> Di solo la frase: «Di en qué gastaste. Lumi lo anota por ti». Deja que el celular hable. Si tienes el video real de la app, guárdalo como <b>demo-app.mp4</b> junto a este archivo y aparece aquí solo.">
   <div class="beam"></div>
   <div class="brand"><svg><use href="#logo"/></svg><b>lumi</b><small>FINANCE</small></div>
   <div class="s4 z" style="height:100%">
@@ -390,8 +443,8 @@ html,body{height:100%;background:#07040F;overflow:hidden;font-family:var(--sans)
   </div>
 </section>
 
-<!-- 5 · VISTAZO + HABLA MIRA DECIDE -->
-<section class="slide dark s5" data-theme="dark" data-steps="0" data-notes="<b>El mes de Juan (20 s).</b> Recorre las 4 tarjetas, siempre con Juan: «Ve cuánto le quedó, lleva 23 días anotando, sabe que se le va en comida y ya cumplió su meta: llantas nuevas para la moto». Cierra señalando las 3 señales: <b>Habla. Mira. Decide.</b>">
+<!-- 6 · VISTAZO + HABLA MIRA DECIDE -->
+<section class="slide dark s5" id="sGlance" data-theme="dark" data-steps="0" data-notes="<b>El mes de Juan (20 s).</b> Recorre las 4 tarjetas, siempre con Juan: «Ve cuánto le quedó, lleva 23 días anotando, sabe que se le va en comida y ya cumplió su meta: llantas nuevas para la moto». Cierra señalando las 3 señales: <b>Habla. Mira. Decide.</b>">
   <div class="brand"><svg><use href="#logo"/></svg><b>lumi</b><small>FINANCE</small></div>
   <span class="ex">PANTALLA DE EJEMPLO</span>
   <div class="z">
@@ -415,8 +468,8 @@ html,body{height:100%;background:#07040F;overflow:hidden;font-family:var(--sans)
   </div>
 </section>
 
-<!-- 6 · UN DÍA DE JUAN -->
-<section class="slide s6" data-theme="light" data-steps="4" data-notes="<b>Un día de Juan con Lumi (30 s). Cada clic es una hora del día.</b> «7 de la mañana: tanquea y lo dice, sin bajarse de la moto». <b>Clic</b>: «1 de la tarde: almuerza, lo dice y Lumi lo pone en Comida». <b>Clic</b>: «6 y media: le entra la plata del día». <b>Clic</b>: «9 de la noche: Lumi le dice cuánto le quedó y le propone guardar para sus llantas». Remata con la frase de abajo: así respondes «me da pereza» y «¿y mis datos?».">
+<!-- 7 · UN DÍA DE JUAN -->
+<section class="slide s6" id="sDay" data-theme="light" data-steps="4" data-notes="<b>Un día de Juan con Lumi (30 s). Cada clic es una hora del día.</b> «7 de la mañana: tanquea y lo dice, sin bajarse de la moto». <b>Clic</b>: «1 de la tarde: almuerza, lo dice y Lumi lo pone en Comida». <b>Clic</b>: «6 y media: le entra la plata del día». <b>Clic</b>: «9 de la noche: Lumi le dice cuánto le quedó y le propone guardar para sus llantas». Remata con la frase de abajo: así respondes «me da pereza» y «¿y mis datos?».">
   <div class="sky noon"></div><div class="sky dusk"></div><div class="sky nite"></div>
   <div class="orb"></div>
   <div class="brand"><svg><use href="#logo"/></svg><b>lumi</b><small>FINANCE</small></div>
@@ -434,7 +487,7 @@ html,body{height:100%;background:#07040F;overflow:hidden;font-family:var(--sans)
   <p class="foot" data-show="4">Sin hojas de cálculo. Sin la clave del banco. <span>Solo tu voz.</span></p>
 </section>
 
-<!-- 7 · PLANES -->
+<!-- 8 · PLANES -->
 <section class="slide light s7" data-theme="light" data-steps="0" data-notes="<b>Planes (30 s). No leas las listas: di para quién es cada uno.</b> «Si apenas vas a empezar: Free. Si quieres saber cada noche cuánto te quedó, como Juan: Premium, 663 pesos al día, menos que un pasaje. Y si tienes una meta grande, como tu propia moto: VIP, 997 pesos al día. Son solo 333 pesos más al día por un agente que te arma el plan y te acompaña cada semana hasta lograrla».">
   <div class="brand"><svg><use href="#logo"/></svg><b>lumi</b><small>FINANCE</small></div>
   <h2 class="h">¿Hasta dónde quieres llegar?</h2>
@@ -467,8 +520,8 @@ html,body{height:100%;background:#07040F;overflow:hidden;font-family:var(--sans)
   <p class="pay">Precios con mes de 30 días. Pagas con Nequi, PSE o tarjeta.</p>
 </section>
 
-<!-- 8 · $0 -->
-<section class="slide s8" data-theme="dark" data-steps="1" data-notes="<b>El remate.</b> Todo está oscuro. Haz una pausa larga: «Ah… una cosa más». <b>Clic</b>: se enciende la farola sobre el $0. «Puedes empezar hoy. Gratis. Para siempre». No agregues nada.">
+<!-- 9 · $0 -->
+<section class="slide s8" id="sZero" data-theme="dark" data-steps="1" data-notes="<b>El remate.</b> Todo está oscuro. Haz una pausa larga: «Ah… una cosa más». <b>Clic</b>: se enciende la farola sobre el $0. «Puedes empezar hoy. Gratis. Para siempre». No agregues nada.">
   <div class="lamp"></div>
   <div class="brand"><svg><use href="#logo"/></svg><b>lumi</b><small style="color:var(--lime)">FINANCE</small></div>
   <div class="pre whisper">Ah… una cosa más.</div>
@@ -476,7 +529,7 @@ html,body{height:100%;background:#07040F;overflow:hidden;font-family:var(--sans)
   <p>Puedes empezar hoy. Gratis. Para siempre.</p>
 </section>
 
-<!-- 9 · CIERRE -->
+<!-- 10 · CIERRE -->
 <section class="slide dark s9" data-theme="dark" data-steps="0" data-notes="<b>Cierre: llegamos a destino.</b> «Tu plata, en voz alta». Invita a escanear ya: «Escaneen el QR de la maleta, escríbannos, y enero y febrero de 2027 les salen gratis en Premium o VIP». Deja la diapositiva quieta mientras escanean.">
   <div class="brand"><svg><use href="#logo"/></svg><b>lumi</b><small>FINANCE</small></div>
   <div class="z">
@@ -520,6 +573,8 @@ html,body{height:100%;background:#07040F;overflow:hidden;font-family:var(--sans)
 const deck = document.getElementById("deck");
 const slides = [...document.querySelectorAll(".slide")];
 const N = slides.length;
+const IX = id => slides.indexOf(document.getElementById(id));
+const I_DEMO = IX("sDemo"), I_GLANCE = IX("sGlance"), I_DAY = IX("sDay"), I_ZERO = IX("sZero");
 let cur = -1, step = 0;
 const cop = n => "$" + Math.round(n).toLocaleString("es-CO");
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -543,7 +598,7 @@ function updateRoute(){
   document.getElementById("done").style.width = pct + "%";
   moto.style.left = pct + "%";
   [...pins.children].forEach((p,i) => p.classList.toggle("hit", i <= cur));
-  deck.dataset.theme = (cur === 5 && step >= 3) ? "dark" : (slides[cur].dataset.theme || "dark");
+  deck.dataset.theme = (cur === I_DAY && step >= 3) ? "dark" : (slides[cur].dataset.theme || "dark");
   moto.style.color = deck.dataset.theme === "light" ? "#1A1030" : "#FFF3EA";
 }
 
@@ -593,7 +648,7 @@ function s1Step(s){
 /* ---- 4 · Demo del celular ---- */
 const vid = document.getElementById("realVideo"), img = document.getElementById("realImg");
 let realMedia = false;
-vid.addEventListener("loadeddata", () => { realMedia = true; vid.style.display = "block"; document.getElementById("ptag").textContent = "App real"; if (cur === 3) vid.play(); });
+vid.addEventListener("loadeddata", () => { realMedia = true; vid.style.display = "block"; document.getElementById("ptag").textContent = "App real"; if (cur === I_DEMO) vid.play(); });
 vid.addEventListener("error", () => { img.src = "app-captura.png"; });
 img.addEventListener("load", () => { realMedia = true; img.style.display = "block"; document.getElementById("ptag").textContent = "App real"; });
 const ex = [["«Tanqueé quince mil»","Gasolina",-15000],["«Almuerzo, doce mil»","Comida",-12000],["«Me entraron 92 mil del día»","Ingreso · domicilios",92000],["«Recarga de datos, diez mil»","Celular",-10000]];
@@ -617,7 +672,7 @@ async function demo(){
 
 /* ---- 6 · La ruta del día ---- */
 const road = document.getElementById("roadPath"), moto6 = document.getElementById("moto6");
-const L = road.getTotalLength(), stops = [...slides[5].querySelectorAll(".stop")];
+const L = road.getTotalLength(), stops = [...slides[I_DAY].querySelectorAll(".stop")];
 moto6.style.offsetPath = `path("${road.getAttribute("d")}")`;
 stops.forEach(s => {
   const p = road.getPointAtLength(L * +s.dataset.at);
@@ -632,10 +687,10 @@ function s6Step(s){
 /* ---- Motor de pasos ---- */
 const hooks = {
   0: {enter: s1Enter, step: s1Step},
-  3: {enter(){ realMedia ? vid.play() : demo(); }, leave(){ demoRun++; vid.pause(); }},
-  4: {enter(){ tween(document.getElementById("streak"), 0, 23, 1400, n => Math.round(n)); }},
-  5: {step: s6Step},
-  7: {step(s){ slides[7].classList.toggle("lit", s >= 1); }}
+  [I_DEMO]: {enter(){ realMedia ? vid.play() : demo(); }, leave(){ demoRun++; vid.pause(); }},
+  [I_GLANCE]: {enter(){ tween(document.getElementById("streak"), 0, 23, 1400, n => Math.round(n)); }},
+  [I_DAY]: {step: s6Step},
+  [I_ZERO]: {step(s){ slides[I_ZERO].classList.toggle("lit", s >= 1); }}
 };
 function apply(){
   const sl = slides[cur];
@@ -689,7 +744,7 @@ function finalState(){
   document.getElementById("s1lbl").textContent = "El domingo le quedaban";
   document.getElementById("s1money")._tw = -1;
   document.getElementById("s1money").textContent = "$35.000";
-  slides[7].classList.add("lit"); s6Step(4);
+  slides[I_ZERO].classList.add("lit"); s6Step(4);
 }
 addEventListener("beforeprint", finalState);
 window.finalState = finalState;
