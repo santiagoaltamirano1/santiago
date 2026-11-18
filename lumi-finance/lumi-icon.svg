@@ -1,12 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="256" height="256" role="img" aria-label="Lumi Finance">
   <defs>
     <radialGradient id="glow" cx="50%" cy="50%" r="50%">
-      <stop offset="0" stop-color="#FFD27A" stop-opacity=".9"/>
-      <stop offset="1" stop-color="#FFD27A" stop-opacity="0"/>
+      <stop offset="0" stop-color="#D4FF5E" stop-opacity=".9"/>
+      <stop offset="1" stop-color="#D4FF5E" stop-opacity="0"/>
     </radialGradient>
   </defs>
-  <rect width="64" height="64" rx="16" fill="#0B1220"/>
+  <rect width="64" height="64" rx="16" fill="#150C2A"/>
   <circle cx="40" cy="24" r="14" fill="url(#glow)"/>
-  <path d="M21 15v29h26" fill="none" stroke="#F4EFE6" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="40" cy="24" r="5.5" fill="#F5B53F"/>
+  <path d="M21 15v29h26" fill="none" stroke="#FFF3EA" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="40" cy="24" r="5.5" fill="#D4FF5E"/>
 </svg>

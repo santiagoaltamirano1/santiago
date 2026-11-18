@@ -44,6 +44,20 @@ Configuración recomendada: **Opus 5.5, esfuerzo medio**. Cada prompt usa la sal
 - **Wise:** transparencia radical. Se dice qué hace y qué no hace.
 - **Duolingo:** la calidez le gana a la autoridad cuando el público es joven.
 
+### Paleta «Cocuyo»: color con emoción
+
+Inspirada en las luciérnagas (cocuyos) de las noches colombianas. Cada color cumple un papel en la historia:
+
+| Color | Hex | Emoción | Dónde aparece |
+|---|---|---|---|
+| Noche violeta | `#150C2A` | La incertidumbre, pero no fría: íntima, de noche en casa | El hero, el simulador y el pie de página |
+| Chispa de luciérnaga | `#D4FF5E` | Asombro y esperanza: «algo se encendió» | Solo donde hay luz: el botón principal, el logo, los momentos clave y las luciérnagas |
+| Amanecer coral | `#FF7452` | Calidez y alivio: «ya pasó la noche» | Barras, acentos, el amanecer y el cierre |
+| Melocotón | `#FFB38A` | Cercanía, sin la frialdad de un banco | Gradientes y fondos suaves |
+| Crema cálida | `#FFF3EA` | Calma y claridad | Las secciones de solución |
+
+**Por qué es memorable:** casi todas las fintech usan azul, verde dinero o dorado. Lumi es la única de violeta con chispa de luciérnaga. Las luciérnagas que flotan al encender la luz son su firma visual: el detalle que la gente recuerda y cuenta.
+
 ### Logo
 
 Una **L** (estructura y orden) que abraza un **punto de luz dorado** (claridad). Se lee como un sol que sale sobre una base firme. Funciona en una sola tinta, a 16 px y como foto de perfil de WhatsApp.
@@ -86,6 +100,8 @@ de su campo semántico; 4) 3 diferenciadores reales y verificables del producto.
 El diseñador de identidad propone 3 conceptos de logo (símbolo + logotipo). Para cada uno:
 la idea, por qué funciona a 16 px y si funciona en una sola tinta. El Director de experiencia elige uno.
 Entreguen el ícono en SVG (viewBox 64x64), la versión horizontal, la paleta en hex y las tipografías de Google Fonts.
+La paleta debe ser de nicho y contar una emoción (no azul banco ni dorado genérico): justifiquen qué siente
+el cliente con cada color y en qué momento de la página aparece. Definan una «firma visual» memorable.
 ```
 
 ### Prompt 3 — Experiencia (lo dirige SOLO el Director de experiencia)
