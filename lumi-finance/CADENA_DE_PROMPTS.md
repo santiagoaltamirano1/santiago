@@ -228,3 +228,27 @@ const CONFIG = {
 ```
 
 Al cambiar esas tres líneas se actualizan todos los botones y números de la página.
+
+
+---
+
+## 5. Mesa de expertos: diseño del pitch para domiciliarios
+
+**Diagnóstico de la versión anterior:** cumplía la retroalimentación, pero su lenguaje visual (luciérnagas y tarjetas genéricas) podía ser de cualquier app. No le hablaba al mundo del domiciliario.
+
+**Decisión del Director de experiencia: «La ruta de Juan».** Toda la presentación es un recorrido nocturno en moto. La luz de Lumi es **la farola de la moto que ilumina el camino**, y el verde lima es **el reflectivo del chaleco**, el color que el domiciliario ve todos los días.
+
+| Recurso visual | Por qué se queda en la mente del domiciliario |
+|---|---|
+| **Una moto que avanza por una ruta en la parte de abajo** de cada diapositiva, como el GPS de un pedido | Es su pantalla de todo el día. La presentación «entrega un pedido» y llega a destino en el cierre |
+| **Notificaciones de pedido** que suman la plata de la semana | Es el sonido y la imagen de su trabajo. Gancho inmediato |
+| **Un tiquete impreso** con los gastos de la semana | Lo conocen de cada restaurante. El problema se ve en un solo objeto |
+| **Cascos** en lugar de puntos para el «5 de cada 10» | Es su objeto: se identifican sin leer |
+| **Un día que pasa de mañana a noche** mientras la moto recorre la ruta | La jornada real del domiciliario, en 4 paradas |
+| **Señales de tránsito**: «Habla. Mira. Decide.» | Se leen como avisos de la calle, en un segundo |
+| **La farola que se enciende** sobre el **$0** | El remate se vuelve un momento físico, casi sonoro |
+| **La maleta de domicilios con el QR** | El objeto más reconocible de su oficio se vuelve la puerta de entrada a Lumi |
+
+**Animaciones con propósito.** Cada movimiento cuenta algo: el dinero que sube y se cae, el tiquete que se imprime, la moto que avanza y la luz que se enciende. Nada se mueve solo para decorar.
+
+**Precio por día** (mes de 30 días): Premium $19.900 son **$663 al día** (menos que un pasaje). VIP $29.900 son **$997 al día**: **solo $333 más al día** que Premium.
