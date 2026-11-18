@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lumi · Pitch de lanzamiento</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23150C2A'/%3E%3Cpath d='M21 15v29h26' fill='none' stroke='%23FFF3EA' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='40' cy='24' r='5.5' fill='%23D4FF5E'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#150C2A; --night-2:#1E1238; --night-3:#2E1A52;
+  --cream:#FFF3EA; --paper:#FFFAF5; --ink:#1A1030; --ink-2:#4A3F5C; --muted:#76698A;
+  --glow:#D4FF5E; --coral:#FF7452; --peach:#FFB38A; --coral-deep:#C2391F; --line:#F0DDD2;
+  --on-dark:#FFF3EA; --on-dark-2:#CDBFE3; --on-dark-3:#A493BF;
+  --serif:"Fraunces", Georgia, serif; --sans:"Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#0B0618;overflow:hidden;font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased}
+/* --- Escenario 1600x900 escalado al tamaño de la pantalla --- */
+.stage{position:fixed;inset:0;display:grid;place-items:center}
+.deck{position:relative;width:1600px;height:900px;transform-origin:center center}
+.slide{position:absolute;inset:0;overflow:hidden;border-radius:6px;padding:90px 110px;display:flex;flex-direction:column;justify-content:center;opacity:0;visibility:hidden;transition:opacity .5s ease, visibility 0s linear .5s}
+.slide.active{opacity:1;visibility:visible;transition:opacity .5s ease}
+.dark{background:radial-gradient(1100px 700px at 75% 0%, var(--night-3), var(--night) 62%);color:var(--on-dark)}
+.light{background:var(--cream);color:var(--ink)}
+.brand{position:absolute;top:56px;left:110px;display:flex;align-items:center;gap:12px;z-index:3}
+.brand svg{width:40px;height:40px;border-radius:11px}
+.brand b{font-family:var(--serif);font-size:30px;font-weight:600;letter-spacing:-1px}
+.brand small{font-size:11px;font-weight:800;letter-spacing:.32em;color:var(--coral-deep);margin-left:6px}
+.dark .brand small{color:var(--glow)}
+.num{position:absolute;bottom:50px;right:110px;font-size:15px;font-weight:700;color:var(--muted);z-index:3}
+.dark .num{color:var(--on-dark-3)}
+.eyebrow{display:inline-block;font-size:17px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--coral-deep);margin-bottom:26px}
+.dark .eyebrow{color:var(--glow)}
+.serif{font-family:var(--serif)}
+em{font-family:var(--serif);font-style:italic;font-weight:500}
+.lime{color:var(--glow)} .coral{color:var(--coral)}
+.f{opacity:0;transform:translateY(18px);transition:opacity .6s ease, transform .6s cubic-bezier(.2,.8,.2,1)}
+.f.on{opacity:1;transform:none}
+.z{position:relative;z-index:2}
+
+/* --- Luciérnagas --- */
+.flies{position:absolute;inset:0;pointer-events:none;z-index:1}
+.fly{position:absolute;width:var(--s);height:var(--s);border-radius:50%;background:var(--glow);box-shadow:0 0 12px 3px rgba(212,255,94,.7),0 0 30px 8px rgba(212,255,94,.22);opacity:0;animation:drift var(--d) ease-in-out var(--dl) infinite alternate, flicker var(--f) ease-in-out var(--dl) infinite}
+@keyframes drift{to{transform:translate(var(--x),var(--y))}}
+@keyframes flicker{0%,100%{opacity:0}30%{opacity:.95}55%{opacity:.25}75%{opacity:.85}}
+
+/* ===== S1 · Gancho ===== */
+.s1 h1{font-family:var(--serif);font-weight:600;font-size:96px;line-height:1.02;letter-spacing:-2.5px}
+.s1 .money{font-variant-numeric:tabular-nums}
+.s1 .q{margin-top:40px;font-size:58px}
+/* ===== S2 · Problema ===== */
+.s2 h2{font-family:var(--serif);font-size:92px;font-weight:600;letter-spacing:-2px;line-height:1}
+.chips{display:flex;flex-wrap:wrap;gap:16px;max-width:900px;margin-top:46px}
+.chip{padding:16px 26px;border-radius:999px;background:var(--paper);border:2px solid #F3C9B6;font-size:26px;font-weight:700;color:var(--ink)}
+.s2 .side{position:absolute;right:110px;top:50%;transform:translateY(-35%);width:420px;background:var(--night);color:var(--on-dark);border-radius:36px;padding:44px}
+.s2 .side p{font-size:30px;font-weight:600;line-height:1.3}
+.s2 .side b{display:block;font-family:var(--serif);font-size:46px;line-height:1.08;color:var(--coral);margin-bottom:16px}
+/* ===== S3 · 5 de cada 10 ===== */
+.s3 .big{font-family:var(--serif);font-weight:700;font-size:250px;line-height:.9;letter-spacing:-8px;color:var(--ink)}
+.s3 .big span{color:var(--coral)}
+.s3 p{font-size:40px;font-weight:600;margin-top:26px}
+.s3 .em{font-size:40px;color:var(--coral-deep);margin-top:16px}
+.dots10{display:flex;gap:16px;margin-top:44px}
+.dots10 i{width:46px;height:46px;border-radius:50%;background:var(--coral)}
+.dots10 i:nth-child(n+6){background:#F3DDD2}
+.src{position:absolute;bottom:50px;left:110px;font-size:15px;color:var(--muted);max-width:1100px}
+/* ===== S4 · Voz ===== */
+.s4{display:grid;grid-template-columns:1fr 470px;gap:60px;align-items:center}
+.s4 h2{font-family:var(--serif);font-weight:600;font-size:104px;line-height:1.02;letter-spacing:-3px}
+.s4 h2 em{display:block;color:var(--glow);text-shadow:0 0 40px rgba(212,255,94,.4)}
+.wave{display:flex;align-items:center;gap:7px;height:110px;margin-top:50px}
+.wave i{width:9px;border-radius:9px;background:var(--glow);height:var(--h);opacity:.85;animation:wv 1.2s ease-in-out var(--dl) infinite alternate}
+@keyframes wv{to{transform:scaleY(.35)}}
+.phone{position:relative;width:420px;height:800px;margin:0 auto;background:#0B0618;border-radius:58px;padding:16px;box-shadow:0 60px 120px -40px rgba(0,0,0,.8),0 0 0 2px rgba(212,255,94,.25),0 0 80px -20px rgba(212,255,94,.35)}
+.screen{position:relative;width:100%;height:100%;border-radius:44px;overflow:hidden;background:var(--paper)}
+.screen video,.screen img.real{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:3;display:none}
+.mock{position:absolute;inset:0;padding:30px 22px;display:flex;flex-direction:column;gap:16px;color:var(--ink)}
+.mock .top{display:flex;justify-content:space-between;font-size:15px;font-weight:800;color:var(--muted)}
+.mock .bal{background:var(--night);color:var(--on-dark);border-radius:22px;padding:20px}
+.mock .bal small{font-size:12px;font-weight:800;letter-spacing:.12em;color:var(--on-dark-3)}
+.mock .bal div{font-family:var(--serif);font-size:38px;margin-top:4px}
+.feed{display:flex;flex-direction:column;gap:12px;flex:1}
+.mv{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-radius:18px;background:#F9E9E0;animation:pop .5s cubic-bezier(.2,.9,.3,1.3) both}
+.mv b{font-size:19px;display:block}
+.mv span{font-size:14px;color:var(--muted)}
+.mv .v{font-weight:800;font-size:20px}
+.mv .v.out{color:var(--coral-deep)} .mv .v.in{color:#16805A}
+@keyframes pop{from{opacity:0;transform:translateY(14px) scale(.96)}}
+.bubble{align-self:flex-end;max-width:90%;background:var(--glow);color:var(--night);padding:14px 18px;border-radius:22px 22px 6px 22px;font-weight:700;font-size:19px;min-height:54px}
+.mic{align-self:center;width:76px;height:76px;border-radius:50%;background:var(--night);display:grid;place-items:center;position:relative}
+.mic::before,.mic::after{content:"";position:absolute;inset:0;border-radius:50%;border:3px solid var(--glow);animation:ring 1.6s ease-out infinite}
+.mic::after{animation-delay:.8s}
+@keyframes ring{to{transform:scale(1.8);opacity:0}}
+.demo-tag{position:absolute;top:-16px;right:20px;z-index:5;background:var(--glow);color:var(--night);font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:6px 14px;border-radius:999px}
+/* ===== S5 · Vistazo + Habla Mira Decide ===== */
+.s5 h2{font-family:var(--serif);font-weight:600;font-size:76px;letter-spacing:-2px}
+.s5 h2 em{color:var(--glow)}
+.s5 .ex{position:absolute;top:150px;right:110px;z-index:3;border:1.5px solid rgba(255,243,234,.3);border-radius:999px;padding:8px 18px;font-size:14px;font-weight:800;letter-spacing:.12em;color:var(--on-dark-2)}
+.cards{display:grid;grid-template-columns:1.25fr 1fr 1fr 1fr;gap:22px;margin-top:44px}
+.card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:30px;padding:30px;min-height:300px;display:flex;flex-direction:column;backdrop-filter:blur(6px)}
+.card h4{font-size:15px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--on-dark-3);margin-bottom:18px}
+.card .row{display:flex;justify-content:space-between;font-size:20px;font-weight:600;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.card .row b{font-variant-numeric:tabular-nums}
+.card .row.ok b{color:var(--glow)}
+.streak{font-family:var(--serif);font-size:120px;font-weight:700;line-height:.9;color:var(--glow)}
+.card p{font-size:20px;font-weight:600;margin-top:10px}
+.pips{display:flex;gap:8px;margin-top:auto}
+.pips i{width:22px;height:22px;border-radius:50%;background:var(--glow)}
+.pips i:last-child{background:rgba(255,255,255,.15)}
+.cat{font-family:var(--serif);font-style:italic;font-size:56px;font-weight:600}
+.bar{height:14px;border-radius:14px;background:rgba(255,255,255,.12);margin-top:auto;overflow:hidden}
+.bar i{display:block;height:100%;width:34%;background:linear-gradient(90deg,var(--coral),var(--peach));border-radius:14px}
+.check{width:110px;height:110px;border-radius:50%;border:8px solid var(--glow);display:grid;place-items:center;margin:4px auto 16px;box-shadow:0 0 40px -6px rgba(212,255,94,.6)}
+.check svg{width:52px;height:52px}
+.card.goal{text-align:center}
+.hmd{display:flex;gap:46px;margin-top:56px;font-family:var(--serif);font-weight:600;font-size:66px;letter-spacing:-1.5px}
+.hmd span:nth-child(1){color:var(--on-dark)} .hmd span:nth-child(2){color:var(--peach)} .hmd span:nth-child(3){color:var(--glow)}
+/* ===== S6 · Un día de Juan ===== */
+.s6 h2{font-family:var(--serif);font-weight:600;font-size:80px;letter-spacing:-2px}
+.s6 h2 em{color:var(--coral-deep)}
+.timeline{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:60px}
+.timeline::before{content:"";position:absolute;left:0;right:0;top:27px;height:4px;border-radius:4px;background:linear-gradient(90deg,#F3C9B6,var(--coral),var(--night))}
+.stop{position:relative;padding-top:74px}
+.stop .t{position:absolute;top:0;left:0;height:58px;padding:0 20px;border-radius:999px;display:flex;align-items:center;background:var(--paper);border:3px solid var(--coral);font-weight:800;font-size:20px}
+.stop .say{font-size:26px;font-weight:700;background:var(--paper);border:1px solid var(--line);border-radius:22px 22px 22px 6px;padding:20px 22px}
+.stop p{font-size:19px;color:var(--ink-2);margin-top:14px;font-weight:600}
+.stop.night .t{background:var(--night);color:var(--glow);border-color:var(--night)}
+.stop.night .say{background:var(--night);color:var(--on-dark);border:0;box-shadow:0 30px 60px -30px rgba(21,12,42,.7)}
+.stop.night .say b{color:var(--glow)}
+.s6 .foot{margin-top:60px;font-size:30px;font-weight:700}
+.s6 .foot span{color:var(--coral-deep)}
+/* ===== S7 · Planes ===== */
+.s7 h2{font-family:var(--serif);font-weight:600;font-size:66px;letter-spacing:-2px;text-align:center}
+.s7 .sub{text-align:center;font-size:24px;color:var(--ink-2);margin-top:10px;font-weight:600}
+.plans{display:grid;grid-template-columns:.85fr 1.1fr 1.1fr;gap:24px;margin-top:44px;align-items:stretch}
+.plan{position:relative;background:var(--paper);border:1px solid var(--line);border-radius:30px;padding:30px 30px 26px;display:flex;flex-direction:column}
+.plan .who{font-size:15px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.plan h3{font-family:var(--serif);font-size:42px;font-weight:600;margin-top:6px}
+.plan .price{font-family:var(--serif);font-size:54px;font-weight:700;line-height:1;margin-top:10px}
+.plan .price small{font-family:var(--sans);font-size:18px;font-weight:600;color:var(--muted)}
+.plan .juan{margin-top:16px;padding:14px 16px;border-radius:16px;background:#FFE6DA;font-size:18px;font-weight:600;line-height:1.35}
+.plan ul{list-style:none;margin-top:16px;display:grid;gap:9px}
+.plan li{position:relative;padding-left:28px;font-size:19px;font-weight:500}
+.plan li::before{content:"✓";position:absolute;left:0;top:1px;width:20px;height:20px;border-radius:50%;background:#FFE3D6;color:var(--coral-deep);font-size:12px;font-weight:800;display:grid;place-items:center}
+.plan .day{margin-top:auto;padding-top:16px;font-size:18px;font-weight:800;color:var(--coral-deep)}
+.plan.prem{background:var(--night);color:var(--on-dark);border:3px solid var(--glow);box-shadow:0 30px 70px -30px rgba(212,255,94,.55)}
+.plan.prem .who,.plan.prem .price small{color:var(--on-dark-3)}
+.plan.prem .juan{background:rgba(212,255,94,.12)}
+.plan.prem li::before{background:rgba(212,255,94,.18);color:var(--glow)}
+.plan.prem .day{color:var(--glow)}
+.plan.vip{border:3px solid var(--coral);background:linear-gradient(160deg,#FFF3EA,#FFE0D0)}
+.plan .tag{position:absolute;top:-17px;left:28px;padding:6px 14px;border-radius:999px;font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;background:var(--glow);color:var(--night)}
+.plan.vip .tag{background:var(--coral);color:#fff}
+.s7 .pay{text-align:center;margin-top:26px;font-size:17px;color:var(--muted);font-weight:600}
+/* ===== S8 · $0 ===== */
+.s8{text-align:center;align-items:center;background:radial-gradient(800px 520px at 50% 50%, #3A1E5E, var(--night) 70%)}
+.s8 .pre{font-family:var(--serif);font-style:italic;font-size:64px;color:var(--on-dark-2)}
+.s8 .zero{font-family:var(--serif);font-weight:700;font-size:300px;line-height:1;color:var(--glow);text-shadow:0 0 90px rgba(212,255,94,.5);letter-spacing:-8px}
+.s8 p{font-size:40px;font-weight:600}
+/* ===== S9 · Cierre ===== */
+.s9{display:grid;grid-template-columns:1fr 420px;gap:80px;align-items:center;background:radial-gradient(900px 600px at 85% 110%, rgba(255,116,82,.45), transparent 60%),radial-gradient(1100px 700px at 20% 0%, var(--night-3), var(--night) 62%)}
+.s9 h2{font-family:var(--serif);font-weight:600;font-size:112px;line-height:1;letter-spacing:-3px}
+.s9 h2 em{display:block;color:var(--glow);text-shadow:0 0 40px rgba(212,255,94,.4)}
+.s9 .lead{font-size:28px;color:var(--on-dark-2);margin-top:26px;font-weight:600}
+.s9 ul{list-style:none;margin-top:30px;display:grid;gap:16px}
+.s9 li{display:flex;gap:16px;align-items:center;font-size:27px;font-weight:600}
+.s9 li::before{content:"✓";flex:none;width:34px;height:34px;border-radius:50%;background:var(--glow);color:var(--night);display:grid;place-items:center;font-size:18px;font-weight:800}
+.qr{background:var(--cream);border-radius:34px;padding:26px;box-shadow:0 0 0 3px var(--glow),0 0 90px -10px rgba(212,255,94,.55);text-align:center;color:var(--ink)}
+.qr svg{width:100%;height:auto;display:block}
+.qr b{display:block;font-size:20px;margin-top:12px}
+.qr span{font-family:var(--serif);font-size:30px;font-weight:700}
+
+/* --- Controles --- */
+.hud{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(255,255,255,.08);z-index:20}
+.hud i{display:block;height:100%;background:var(--glow);width:0;transition:width .4s ease}
+.notes{position:fixed;left:16px;right:16px;bottom:16px;z-index:30;max-height:34vh;overflow:auto;background:rgba(11,6,24,.94);color:var(--on-dark);border:1px solid rgba(212,255,94,.35);border-radius:16px;padding:18px 22px;font:500 17px/1.5 var(--sans);display:none}
+.notes.show{display:block}
+.notes b{color:var(--glow)}
+.help{position:fixed;top:12px;right:16px;z-index:30;font:600 12px var(--sans);color:rgba(255,243,234,.45)}
+
+@media print{
+  @page{size:1600px 900px;margin:0}
+  html,body{overflow:visible;height:auto;background:none}
+  .stage{position:static;display:block}
+  .deck{transform:none!important;width:auto;height:auto}
+  .slide{position:relative;width:1600px;height:900px;opacity:1;visibility:visible;border-radius:0;page-break-after:always;break-after:page}
+  .f{opacity:1;transform:none}
+  .hud,.notes,.help{display:none!important}
+  *{animation:none!important;transition:none!important}
+  .fly{opacity:.8}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}.fly{opacity:.7}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="logo" viewBox="0 0 64 64">
+    <rect width="64" height="64" rx="16" fill="#150C2A"/>
+    <circle cx="40" cy="24" r="14" fill="#D4FF5E" opacity=".22"/>
+    <path d="M21 15v29h26" fill="none" stroke="#FFF3EA" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="40" cy="24" r="5.5" fill="#D4FF5E"/>
+  </symbol>
+</svg>
+
+<div class="stage"><div class="deck" id="deck">
+
+<!-- 1 · GANCHO: directo, con una persona -->
+<section class="slide dark s1" data-notes="<b>Gancho.</b> Arranca sin saludo largo. Mira al público y cuenta la historia de Juan, como si fuera un amigo. Haz una pausa antes de cada clic. En el último, deja que el número baje solo y pregunta: «¿En qué se le fue?». Silencio de 2 segundos.">
+  <div class="flies" data-flies="14"></div>
+  <div class="brand"><svg><use href="#logo"/></svg><b>lumi</b><small>FINANCE</small></div>
+  <div class="z">
+    <span class="eyebrow">Esta es la semana de Juan</span>
+    <h1>Juan hace domicilios en moto.<br>
+      <span class="f">Esta semana ganó <span class="lime money">$420.000</span>.</span><br>
+      <span class="f" data-countdown>El domingo tenía <span class="coral money" id="cnt">$35.000</span>.</span>
+    </h1>
+    <p class="q f"><em>¿En qué se le fue?</em></p>
+  </div>
+  <div class="num">1</div>
+</section>
+
+<!-- 2 · PROBLEMA: simple, solo lo necesario -->
+<section class="slide light s2" data-notes="<b>El problema, en 20 segundos.</b> «No fue un gasto grande. Fue la gasolina, el almuerzo en la calle, la recarga…». Lee 2 o 3 chips, no todos. Remata con la tarjeta oscura y pasa.">
+  <div class="brand"><svg><use href="#logo"/></svg><b>lumi</b><small>FINANCE</small></div>
+  <span class="eyebrow">No fue un gasto grande</span>
+  <h2>Fueron estos.</h2>
+  <div class="chips">
+    <span class="chip">Gasolina</span><span class="chip">Almuerzo en la calle</span><span class="chip">Recarga de datos</span>
+    <span class="chip">El tinto de cada parada</span><span class="chip">La gaseosa del calor</span><span class="chip">El domi que él mismo pidió</span>
+  </div>
+  <div class="side"><b>Pequeños. Diarios. Invisibles.</b><p>Juntos se comieron su semana.</p></div>
+  <div class="num">2</div>
+</section>
+
+<!-- 3 · 5 DE CADA 10 -->
+<section class="slide light s3" data-notes="<b>El dato.</b> «Juan no es el único: 5 de cada 10 jóvenes en Colombia no sabe hacer un presupuesto». Y bajando el tono: «No es falta de ganas. Es que anotar da pereza». Esa frase es el puente a la solución.">
+  <div class="brand"><svg><use href="#logo"/></svg><b>lumi</b><small>FINANCE</small></div>
+  <div class="big">5 <span>de cada</span> 10</div>
+  <div class="dots10" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <p>jóvenes en Colombia no sabe hacer un presupuesto.</p>
+  <p class="em"><em>Juan tampoco. No es falta de ganas: anotar da pereza.</em></p>
+  <div class="src">Fuente: Encuesta de Calidad de Vida 2025, citada por Forbes Colombia (más del 50 % de los jóvenes no sabe hacer un presupuesto).</div>
+  <div class="num">3</div>
+</section>
+
+<!-- 4 · DI EN QUÉ GASTASTE (con la app real) -->
+<section class="slide dark" data-notes="<b>La solución.</b> Di la frase y no agregues nada más: «Di en qué gastaste. Lumi lo anota por ti». Deja que el celular hable. Si tienes el video real de la app, guárdalo como <b>demo-app.mp4</b> junto a este archivo y aparece aquí solo.">
+  <div class="flies" data-flies="10"></div>
+  <div class="brand"><svg><use href="#logo"/></svg><b>lumi</b><small>FINANCE</small></div>
+  <div class="s4 z">
+    <div>
+      <h2>Di en qué gastaste.<em>Lumi lo anota por ti.</em></h2>
+      <div class="wave" id="wave"></div>
+    </div>
+    <div class="phone">
+      <span class="demo-tag" id="demoTag">Así se ve</span>
+      <div class="screen">
+        <!-- Pon tu grabación real como demo-app.mp4 (o una captura como app-captura.png) junto a este archivo -->
+        <video id="realVideo" src="demo-app.mp4" muted loop playsinline preload="auto"></video>
+        <img class="real" id="realImg" alt="Captura real de la app Lumi">
+        <div class="mock">
+          <div class="top"><span>9:41</span><span>lumi</span></div>
+          <div class="bal"><small>DISPONIBLE HOY</small><div id="bal">$ 86.000</div></div>
+          <div class="feed" id="feed"></div>
+          <div class="bubble" id="bubble"></div>
+          <div class="mic"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#D4FF5E" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v5"/></svg></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="num">4</div>
+</section>
+
+<!-- 5 · VISTAZO + HABLA, MIRA, DECIDE (antes 7 y 8) -->
+<section class="slide dark s5" data-notes="<b>Tu mes en un vistazo.</b> Recorre las 4 tarjetas en 15 segundos, siempre con Juan: «Juan ve cuánto le quedó, lleva 23 días anotando, su plata se va en comida y ya cumplió su meta: las llantas de la moto». Cierra leyendo abajo: <b>Habla. Mira. Decide.</b>">
+  <div class="flies" data-flies="8"></div>
+  <div class="brand"><svg><use href="#logo"/></svg><b>lumi</b><small>FINANCE</small></div>
+  <span class="ex">PANTALLA DE EJEMPLO</span>
+  <div class="z">
+    <h2>El mes de Juan, <em>en un vistazo.</em></h2>
+    <div class="cards">
+      <div class="card"><h4>Tu vistazo</h4>
+        <div class="row"><span>Ganaste</span><b>$1.680.000</b></div>
+        <div class="row"><span>Gastaste</span><b>$1.210.000</b></div>
+        <div class="row ok"><span>Te quedan</span><b>$470.000</b></div>
+      </div>
+      <div class="card"><h4>Tu racha</h4><div class="streak">23</div><p>días seguidos anotando</p>
+        <div class="pips"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+      <div class="card"><h4>Donde más gastaste</h4><div class="cat">Comida</div><p>34 % de tu mes</p><div class="bar"><i></i></div></div>
+      <div class="card goal"><h4>Meta cumplida</h4>
+        <div class="check"><svg viewBox="0 0 24 24" fill="none" stroke="#D4FF5E" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
+        <p>Llantas nuevas para la moto</p></div>
+    </div>
+    <div class="hmd"><span>Habla.</span><span>Mira.</span><span>Decide.</span></div>
+  </div>
+  <div class="num">5</div>
+</section>
+
+<!-- 6 · UN DÍA DE JUAN (reemplaza la antigua 10) -->
+<section class="slide light s6" data-notes="<b>Un día de Juan con Lumi.</b> Cuéntalo como historia, de izquierda a derecha: «7 de la mañana, tanquea y lo dice. A la 1, almuerza y lo dice. A las 6:30 le entra la plata del día. Y a las 9 de la noche Lumi le dice cuánto le quedó y le propone ahorrar para sus llantas». Remata con la frase de abajo: así respondes «me da pereza» y «¿y mis datos?» sin una tabla de objeciones.">
+  <div class="brand"><svg><use href="#logo"/></svg><b>lumi</b><small>FINANCE</small></div>
+  <span class="eyebrow">Así se ve en la vida real</span>
+  <h2>Un día de Juan <em>con Lumi.</em></h2>
+  <div class="timeline">
+    <div class="stop f"><span class="t">7:10 a. m.</span><div class="say">«Tanqueé 15 mil»</div><p>3 segundos, sin bajarse de la moto.</p></div>
+    <div class="stop f"><span class="t">1:00 p. m.</span><div class="say">«Almuerzo, 12 mil»</div><p>Lumi lo pone en Comida solo.</p></div>
+    <div class="stop f"><span class="t">6:30 p. m.</span><div class="say">«Me entraron 92 mil del día»</div><p>Su ingreso, registrado.</p></div>
+    <div class="stop night f"><span class="t">9:00 p. m.</span><div class="say">Hoy te quedaron <b>$58.000</b>. ¿Guardamos <b>$8.000</b> para tus llantas?</div><p>Lumi le dice qué hacer.</p></div>
+  </div>
+  <p class="foot">Sin hojas de cálculo. Sin la clave del banco. <span>Solo tu voz.</span></p>
+  <div class="num">6</div>
+</section>
+
+<!-- 7 · PLANES (replanteados) -->
+<section class="slide light s7" data-notes="<b>Planes, con Juan como guía.</b> No leas las listas. Di solo para quién es cada uno: «Si apenas vas a empezar: Free. Si quieres ordenar tu día a día como Juan: Premium, menos de $700 al día, menos que un pasaje. Y si tienes una meta grande, como la moto propia: VIP. Esos $10.000 de más te dan un agente que te arma el plan y te acompaña cada semana hasta lograrla».">
+  <div class="brand"><svg><use href="#logo"/></svg><b>lumi</b><small>FINANCE</small></div>
+  <h2>¿Hasta dónde quieres llegar?</h2>
+  <p class="sub">Elige según tu meta, no según la lista de funciones.</p>
+  <div class="plans">
+    <div class="plan">
+      <span class="who">Para empezar</span><h3>Free</h3>
+      <div class="price">$0</div>
+      <div class="juan">«Quiero probar anotar mis gastos».</div>
+      <ul><li>Anotas a mano</li><li>1 meta de ahorro</li><li>5 audios al mes</li></ul>
+      <div class="day">Gratis para siempre</div>
+    </div>
+    <div class="plan prem">
+      <span class="tag">El que necesita Juan</span>
+      <span class="who">Para ordenar tu día a día</span><h3>Premium</h3>
+      <div class="price">$19.900 <small>al mes</small></div>
+      <div class="juan">«Quiero saber cada noche cuánto me quedó».</div>
+      <ul><li>Audios sin límite</li><li>Asistente de finanzas</li><li>Tu informe cada semana</li><li>Metas sin límite</li></ul>
+      <div class="day">$660 al día: menos que un pasaje</div>
+    </div>
+    <div class="plan vip">
+      <span class="tag">Para una meta grande</span>
+      <span class="who">Para cumplir algo grande</span><h3>VIP</h3>
+      <div class="price">$29.900 <small>al mes</small></div>
+      <div class="juan">«Quiero mi propia moto en 10 meses».</div>
+      <ul><li>Todo Premium, sin límites</li><li><b>Agente que arma tu plan</b> y te acompaña cada semana</li><li>Primero en cada novedad</li><li>Atención prioritaria</li></ul>
+      <div class="day">+$10.000: alguien empujando tu meta</div>
+    </div>
+  </div>
+  <p class="pay">Pagas con Nequi, PSE o tarjeta.</p>
+  <div class="num">7</div>
+</section>
+
+<!-- 8 · $0 (se mantiene) -->
+<section class="slide dark s8" data-notes="<b>El remate.</b> Pausa larga antes de hablar. «Ah… una cosa más». Clic. «Puedes empezar hoy. Gratis. Para siempre». No agregues nada.">
+  <div class="flies" data-flies="18"></div>
+  <div class="brand"><svg><use href="#logo"/></svg><b>lumi</b><small>FINANCE</small></div>
+  <div class="z">
+    <div class="pre">Ah… una cosa más.</div>
+    <div class="zero f">$0</div>
+    <p class="f">Puedes empezar hoy. Gratis. Para siempre.</p>
+  </div>
+  <div class="num">8</div>
+</section>
+
+<!-- 9 · CIERRE (se mantiene, con la oferta y el QR real) -->
+<section class="slide dark s9" data-notes="<b>Cierre.</b> «Tu plata, en voz alta». Invita a escanear ya: «Escaneen, escríbannos, y enero y febrero de 2027 les salen gratis en Premium o VIP». Deja la diapositiva quieta mientras escanean.">
+  <div class="flies" data-flies="16"></div>
+  <div class="brand"><svg><use href="#logo"/></svg><b>lumi</b><small>FINANCE</small></div>
+  <div class="z">
+    <h2>Tu plata,<em>en voz alta.</em></h2>
+    <p class="lead">Escanea y escríbenos por WhatsApp.</p>
+    <ul>
+      <li>Plan Free, gratis para siempre</li>
+      <li>Enero y febrero de 2027 gratis en Premium o VIP</li>
+      <li>Lanzamiento: 1 de enero de 2027</li>
+    </ul>
+  </div>
+  <div class="qr z">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 53 53" class="segno"><path fill="#fff3ea" d="M0 0h53v53h-53z"/><path class="qrline" stroke="#150c2a" d="M2 2.5h7m1 0h1m1 0h1m1 0h1m2 0h2m2 0h1m2 0h1m1 0h1m2 0h1m3 0h1m3 0h1m1 0h1m2 0h1m1 0h7m-49 1h1m5 0h1m1 0h1m3 0h1m2 0h3m1 0h1m3 0h1m1 0h4m1 0h1m4 0h1m2 0h3m1 0h1m5 0h1m-49 1h1m1 0h3m1 0h1m1 0h1m2 0h3m1 0h4m1 0h3m1 0h1m6 0h2m1 0h2m1 0h1m1 0h2m1 0h1m1 0h3m1 0h1m-49 1h1m1 0h3m1 0h1m8 0h4m1 0h1m2 0h1m2 0h1m1 0h6m1 0h2m2 0h1m2 0h1m1 0h3m1 0h1m-49 1h1m1 0h3m1 0h1m1 0h1m1 0h4m2 0h1m2 0h1m1 0h13m1 0h3m4 0h1m1 0h3m1 0h1m-49 1h1m5 0h1m5 0h2m2 0h1m1 0h1m1 0h1m1 0h1m3 0h1m1 0h1m2 0h1m1 0h1m1 0h2m1 0h1m3 0h1m5 0h1m-49 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-39 1h1m4 0h4m2 0h2m3 0h3m1 0h1m3 0h2m2 0h1m-39 1h1m2 0h6m2 0h2m7 0h1m1 0h7m2 0h1m2 0h1m1 0h4m1 0h1m2 0h1m1 0h3m-48 1h3m1 0h1m1 0h4m2 0h4m1 0h1m1 0h3m2 0h2m3 0h3m1 0h3m1 0h3m1 0h4m2 0h1m-49 1h4m2 0h7m3 0h2m9 0h1m3 0h2m1 0h1m1 0h2m1 0h2m2 0h4m1 0h1m-48 1h1m1 0h1m3 0h11m4 0h2m3 0h1m1 0h1m1 0h2m7 0h2m2 0h5m-49 1h3m3 0h1m2 0h1m1 0h1m1 0h3m1 0h2m1 0h1m2 0h4m1 0h1m1 0h3m1 0h4m1 0h3m1 0h2m2 0h2m-49 1h3m7 0h1m1 0h4m2 0h3m2 0h1m2 0h5m1 0h1m2 0h5m2 0h1m1 0h2m1 0h1m-47 1h1m4 0h3m1 0h1m1 0h1m2 0h1m1 0h2m3 0h1m1 0h3m6 0h1m1 0h2m1 0h1m1 0h1m2 0h2m1 0h3m-49 1h1m3 0h1m6 0h1m1 0h2m2 0h2m1 0h1m1 0h2m2 0h3m1 0h3m1 0h1m1 0h1m1 0h5m2 0h2m1 0h1m-49 1h1m1 0h1m3 0h1m6 0h4m1 0h2m3 0h2m1 0h2m2 0h1m1 0h1m2 0h5m2 0h1m1 0h1m1 0h2m-46 1h1m2 0h1m4 0h2m1 0h1m1 0h2m7 0h2m1 0h5m2 0h4m1 0h5m1 0h3m-48 1h3m1 0h1m1 0h1m2 0h3m6 0h1m1 0h3m1 0h2m1 0h2m1 0h3m1 0h3m3 0h1m2 0h1m1 0h2m1 0h1m-48 1h2m2 0h1m1 0h2m2 0h3m2 0h1m1 0h1m1 0h2m1 0h1m1 0h4m1 0h1m4 0h1m3 0h1m1 0h2m2 0h1m1 0h2m-46 1h5m4 0h2m6 0h2m2 0h1m2 0h4m5 0h4m1 0h3m3 0h1m-48 1h1m1 0h1m1 0h1m2 0h4m1 0h1m1 0h2m1 0h4m1 0h1m1 0h1m1 0h3m1 0h3m1 0h1m2 0h7m1 0h1m-46 1h2m1 0h8m3 0h2m1 0h1m1 0h8m5 0h1m1 0h3m3 0h6m2 0h1m-45 1h1m3 0h4m1 0h2m2 0h3m2 0h1m3 0h2m1 0h2m1 0h1m1 0h2m3 0h2m3 0h3m1 0h1m-46 1h2m1 0h1m1 0h1m1 0h1m1 0h2m1 0h1m1 0h1m1 0h1m1 0h2m1 0h1m1 0h7m1 0h5m1 0h1m1 0h1m1 0h1m3 0h1m-45 1h1m3 0h1m1 0h1m1 0h1m1 0h1m1 0h2m1 0h4m3 0h2m1 0h3m5 0h2m1 0h1m3 0h2m1 0h1m-46 1h7m2 0h1m1 0h1m3 0h1m4 0h5m1 0h2m1 0h1m1 0h1m1 0h4m1 0h7m1 0h1m-49 1h1m2 0h1m3 0h1m2 0h3m1 0h2m4 0h1m2 0h5m1 0h3m1 0h3m2 0h2m2 0h1m1 0h3m-46 1h1m2 0h1m1 0h4m1 0h1m1 0h1m1 0h1m1 0h2m1 0h1m3 0h4m2 0h1m1 0h1m2 0h3m1 0h4m2 0h4m-49 1h4m4 0h2m4 0h1m1 0h2m1 0h2m1 0h4m1 0h2m1 0h1m1 0h1m1 0h1m2 0h1m1 0h1m1 0h1m4 0h2m-47 1h1m2 0h1m1 0h2m1 0h1m2 0h1m2 0h1m3 0h1m2 0h1m1 0h1m1 0h2m4 0h1m4 0h1m1 0h4m5 0h1m-48 1h3m4 0h2m2 0h1m1 0h1m3 0h1m2 0h2m1 0h1m4 0h1m1 0h4m1 0h1m1 0h2m1 0h1m1 0h3m2 0h1m-49 1h4m1 0h2m1 0h2m1 0h2m2 0h1m1 0h1m1 0h2m2 0h1m2 0h1m5 0h2m2 0h2m1 0h1m1 0h1m1 0h3m2 0h1m-49 1h2m1 0h3m1 0h1m1 0h1m1 0h4m1 0h1m3 0h5m1 0h1m2 0h1m3 0h1m1 0h1m1 0h5m1 0h4m-44 1h2m1 0h1m3 0h1m1 0h2m1 0h1m5 0h2m1 0h3m1 0h4m1 0h1m1 0h2m2 0h1m1 0h3m1 0h1m2 0h1m-49 1h2m3 0h1m3 0h3m1 0h1m2 0h3m2 0h3m2 0h1m2 0h4m1 0h1m2 0h5m3 0h4m-48 1h2m1 0h9m1 0h1m1 0h1m1 0h2m3 0h1m3 0h4m1 0h2m1 0h2m1 0h6m3 0h2m-47 1h2m3 0h3m3 0h1m1 0h3m2 0h1m1 0h1m1 0h1m1 0h3m1 0h3m2 0h2m1 0h1m5 0h2m-45 1h1m3 0h3m1 0h1m1 0h3m1 0h1m1 0h1m1 0h2m2 0h2m4 0h1m1 0h1m3 0h5m2 0h1m3 0h3m-48 1h3m3 0h2m3 0h1m2 0h2m3 0h1m1 0h1m1 0h1m4 0h2m1 0h3m1 0h4m1 0h1m1 0h1m1 0h3m-48 1h3m3 0h1m1 0h2m1 0h1m1 0h4m4 0h7m1 0h1m1 0h2m3 0h13m-41 1h4m1 0h3m2 0h2m2 0h1m3 0h3m1 0h1m3 0h1m1 0h1m2 0h2m3 0h1m1 0h1m-47 1h7m1 0h3m2 0h1m4 0h5m1 0h1m1 0h2m1 0h1m1 0h1m3 0h1m4 0h1m1 0h1m1 0h1m1 0h3m-49 1h1m5 0h1m1 0h1m1 0h2m2 0h1m1 0h2m4 0h1m3 0h3m1 0h1m8 0h2m3 0h2m1 0h2m-49 1h1m1 0h3m1 0h1m1 0h1m1 0h1m3 0h1m2 0h2m3 0h7m2 0h1m1 0h1m2 0h3m1 0h6m1 0h2m-49 1h1m1 0h3m1 0h1m1 0h2m3 0h3m1 0h1m2 0h2m1 0h1m1 0h1m2 0h3m1 0h1m1 0h3m1 0h1m3 0h2m1 0h2m1 0h1m-49 1h1m1 0h3m1 0h1m2 0h1m2 0h1m1 0h2m1 0h1m1 0h3m2 0h1m2 0h1m1 0h1m1 0h2m1 0h1m1 0h1m6 0h2m2 0h1m-48 1h1m5 0h1m2 0h1m5 0h3m4 0h10m2 0h1m3 0h1m1 0h3m2 0h4m-49 1h7m1 0h1m4 0h1m1 0h1m2 0h1m2 0h3m1 0h4m1 0h3m1 0h1m1 0h1m1 0h3m2 0h2m3 0h1"/></svg>
+    <b>Escanea con tu cámara</b>
+    <span>+57 324 659 1009</span>
+  </div>
+  <div class="num">9</div>
+</section>
+
+</div></div>
+
+<div class="hud"><i id="prog"></i></div>
+<div class="notes" id="notes"></div>
+<div class="help" id="help">← → avanzar · N notas · F pantalla completa</div>
+
+<script>
+const deck = document.getElementById("deck");
+const slides = [...document.querySelectorAll(".slide")];
+let cur = 0;
+
+/* Escala el lienzo 1600x900 a la ventana */
+function fit(){ deck.style.transform = `scale(${Math.min(innerWidth/1600, innerHeight/900)})`; }
+addEventListener("resize", fit); fit();
+
+/* Luciérnagas */
+document.querySelectorAll("[data-flies]").forEach(box => {
+  const r = (a,b) => a + Math.random()*(b-a);
+  for (let i = 0; i < +box.dataset.flies; i++){
+    const f = document.createElement("i"); f.className = "fly";
+    f.style.cssText = `left:${r(2,98)}%;top:${r(5,95)}%;--s:${r(4,8).toFixed(1)}px;--d:${r(7,14).toFixed(1)}s;--f:${r(2.5,5).toFixed(1)}s;--dl:-${r(0,6).toFixed(1)}s;--x:${r(-90,90)|0}px;--y:${r(-70,50)|0}px`;
+    box.appendChild(f);
+  }
+});
+
+/* Onda de voz */
+const wave = document.getElementById("wave");
+for (let i = 0; i < 46; i++){
+  const b = document.createElement("i");
+  b.style.setProperty("--h", (20 + Math.abs(Math.sin(i*.55))*80 + Math.random()*10) + "px");
+  b.style.setProperty("--dl", (-Math.random()*1.2).toFixed(2) + "s");
+  wave.appendChild(b);
+}
+
+/* Cuenta regresiva del dinero de Juan (diapositiva 1) */
+const cop = n => "$" + Math.round(n).toLocaleString("es-CO");
+function countDown(){
+  const el = document.getElementById("cnt"), from = 420000, to = 35000, t0 = performance.now(), dur = 2200;
+  (function step(t){
+    const k = Math.min(1, (t - t0)/dur), e = 1 - Math.pow(1-k, 3);
+    el.textContent = cop(from - (from-to)*e);
+    if (k < 1) requestAnimationFrame(step);
+  })(t0);
+}
+
+/* Navegación con pasos (fragmentos .f) */
+function frags(i){ return [...slides[i].querySelectorAll(".f")]; }
+function show(i){
+  slides.forEach((s,k) => s.classList.toggle("active", k === i));
+  cur = i; location.hash = i + 1;
+  document.getElementById("prog").style.width = ((i+1)/slides.length*100) + "%";
+  document.getElementById("notes").innerHTML = slides[i].dataset.notes || "";
+  if (i === 3) startDemo(); else stopDemo();
+}
+function next(){
+  const pending = frags(cur).find(f => !f.classList.contains("on"));
+  if (pending){ pending.classList.add("on"); if (pending.hasAttribute("data-countdown")) countDown(); return; }
+  if (cur < slides.length - 1){ show(cur + 1); }
+}
+function prev(){
+  const done = frags(cur).filter(f => f.classList.contains("on"));
+  if (done.length){ done.at(-1).classList.remove("on"); return; }
+  if (cur > 0){ show(cur - 1); frags(cur).forEach(f => f.classList.add("on")); document.getElementById("cnt").textContent = "$35.000"; }
+}
+addEventListener("keydown", e => {
+  if (["ArrowRight","ArrowDown","PageDown"," ","Enter"].includes(e.key)){ e.preventDefault(); next(); }
+  else if (["ArrowLeft","ArrowUp","PageUp","Backspace"].includes(e.key)){ e.preventDefault(); prev(); }
+  else if (e.key === "n" || e.key === "N"){ document.getElementById("notes").classList.toggle("show"); }
+  else if (e.key === "f" || e.key === "F"){ document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
+  else if (e.key === "Home"){ show(0); }
+});
+addEventListener("click", e => { (e.clientX < innerWidth * .25) ? prev() : next(); });
+let tx = null;
+addEventListener("touchstart", e => tx = e.touches[0].clientX, {passive:true});
+addEventListener("touchend", e => { if (tx === null) return; const d = e.changedTouches[0].clientX - tx; if (Math.abs(d) > 40) (d < 0 ? next() : prev()); tx = null; });
+setTimeout(() => document.getElementById("help").style.opacity = 0, 6000);
+
+/* Demo del celular: usa el video o la captura real si existen; si no, la demo animada */
+const vid = document.getElementById("realVideo"), img = document.getElementById("realImg");
+let realMedia = false;
+vid.addEventListener("loadeddata", () => { realMedia = true; vid.style.display = "block"; document.getElementById("demoTag").textContent = "App real"; if (cur === 3) vid.play(); });
+vid.addEventListener("error", () => { img.src = "app-captura.png"; });
+img.addEventListener("load", () => { realMedia = true; img.style.display = "block"; document.getElementById("demoTag").textContent = "App real"; });
+const ex = [
+  {say:"«Tanqueé quince mil»", cat:"Gasolina", meta:"Registrado por voz · hoy", v:-15000},
+  {say:"«Almuerzo, doce mil»", cat:"Comida", meta:"Registrado por voz · hoy", v:-12000},
+  {say:"«Me entraron 92 mil del día»", cat:"Ingreso · domicilios", meta:"Registrado por voz · hoy", v:92000},
+  {say:"«Recarga de datos, diez mil»", cat:"Celular", meta:"Registrado por voz · hoy", v:-10000}
+];
+let demoT = null, k = 0, bal = 86000;
+const feed = document.getElementById("feed"), bubble = document.getElementById("bubble"), balEl = document.getElementById("bal");
+async function typeIt(t){ bubble.textContent = ""; for (const c of t){ bubble.textContent += c; await new Promise(r => demoT = setTimeout(r, 38)); } }
+async function loopDemo(){
+  const my = Symbol(); loopDemo.id = my;
+  while (loopDemo.id === my){
+    const e = ex[k++ % ex.length];
+    await typeIt(e.say); if (loopDemo.id !== my) break;
+    await new Promise(r => demoT = setTimeout(r, 650));
+    const d = document.createElement("div"); d.className = "mv";
+    d.innerHTML = `<div><b>${e.cat}</b><span>${e.meta}</span></div><div class="v ${e.v<0?"out":"in"}">${e.v<0?"−":"+"} ${cop(Math.abs(e.v))}</div>`;
+    feed.prepend(d); while (feed.children.length > 4) feed.lastChild.remove();
+    bal += e.v; balEl.textContent = "$ " + bal.toLocaleString("es-CO");
+    await new Promise(r => demoT = setTimeout(r, 1900));
+  }
+}
+function startDemo(){ if (realMedia && vid.style.display === "block") vid.play(); else loopDemo(); }
+function stopDemo(){ loopDemo.id = null; clearTimeout(demoT); vid.pause(); }
+
+/* Inicio (respeta #número en la URL) */
+const startAt = Math.max(0, Math.min(slides.length - 1, (parseInt(location.hash.slice(1)) || 1) - 1));
+show(startAt);
+if (matchMedia("print").matches) slides.forEach(s => s.querySelectorAll(".f").forEach(f => f.classList.add("on")));
+</script>
+</body>
+</html>
