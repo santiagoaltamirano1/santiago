@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lumi · La ruta de Juan</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23150C2A'/%3E%3Cpath d='M21 15v29h26' fill='none' stroke='%23FFF3EA' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='40' cy='24' r='5.5' fill='%23D4FF5E'/%3E%3C/svg%3E">
+<script>document.documentElement.classList.add("js")</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,500;1,9..144,600&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -21,8 +22,8 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;background:#07040F;overflow:hidden;font-family:var(--sans);-webkit-font-smoothing:antialiased}
-.stage{position:fixed;inset:0;display:grid;place-items:center}
-.deck{position:relative;width:1600px;height:900px;transform-origin:center;overflow:hidden;border-radius:8px}
+.stage{position:fixed;inset:0;overflow:hidden}
+.deck{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform-origin:center;transform:translate(-50%,-50%);overflow:hidden;border-radius:8px}
 
 /* ---------- Diapositivas ---------- */
 .slide{position:absolute;inset:0;overflow:hidden;padding:110px 110px 130px;opacity:0;visibility:hidden;transition:opacity .55s ease,visibility 0s linear .55s}
@@ -291,6 +292,14 @@ html,body{height:100%;background:#07040F;overflow:hidden;font-family:var(--sans)
 .s10.play .nlines li{animation:lineIn .35s ease both;animation-delay:calc(.4s + var(--i)*.34s)}
 .s10.play .stampN{animation:stamp .5s cubic-bezier(.3,1.6,.5,1) both 3.6s}
 
+/* ---------- Sin JavaScript: se ven todas, una debajo de otra ---------- */
+html:not(.js),html:not(.js) body{overflow:auto;height:auto}
+html:not(.js) .stage{position:static;display:block}
+html:not(.js) .deck{position:relative;left:auto;top:auto;transform:none;height:auto;overflow:visible;margin:0 auto}
+html:not(.js) .slide{position:relative;opacity:1;visibility:visible;margin-bottom:16px}
+html:not(.js) [data-show]{opacity:1;transform:none}
+html:not(.js) .route,html:not(.js) .help{display:none}
+
 /* ---------- Ayudas ---------- */
 .notes{position:fixed;left:16px;right:16px;bottom:16px;z-index:30;max-height:34vh;overflow:auto;background:rgba(7,4,15,.95);color:var(--on-dark);border:1px solid rgba(212,255,94,.4);border-radius:16px;padding:18px 22px;font:500 17px/1.5 var(--sans);display:none}
 .notes.show{display:block} .notes b{color:var(--lime)}
@@ -300,7 +309,7 @@ html,body{height:100%;background:#07040F;overflow:hidden;font-family:var(--sans)
   @page{size:1600px 900px;margin:0}
   html,body{overflow:visible;height:auto;background:none}
   .stage{position:static;display:block}
-  .deck{transform:none!important;overflow:visible;border-radius:0;width:1600px;height:auto}
+  .deck{position:relative;left:auto;top:auto;transform:none!important;overflow:visible;border-radius:0;width:1600px;height:auto}
   .slide{position:relative;width:1600px;height:900px;opacity:1!important;visibility:visible!important;page-break-after:always;break-after:page}
   .notes,.help,.route{display:none!important}
   *{animation:none!important;transition:none!important}
@@ -339,7 +348,7 @@ html,body{height:100%;background:#07040F;overflow:hidden;font-family:var(--sans)
 <div class="stage"><div class="deck" id="deck">
 
 <!-- 1 · GANCHO -->
-<section class="slide dark s1" data-theme="dark" data-steps="2" data-notes="<b>SANTIAGO · Juan.</b> «Él es Juan. Hace domicilios en moto, aquí en Cali. Esta semana hizo 58 domicilios… y ganó 420 mil pesos». <b>[CLIC]</b> «Pero el domingo en la noche… le quedaban 35 mil». <b>[CLIC]</b> «¿En qué se le fue?» (pausa)">
+<section class="slide dark s1 active" data-theme="dark" data-steps="2" data-notes="<b>SANTIAGO · Juan.</b> «Él es Juan. Hace domicilios en moto, aquí en Cali. Esta semana hizo 58 domicilios… y ganó 420 mil pesos». <b>[CLIC]</b> «Pero el domingo en la noche… le quedaban 35 mil». <b>[CLIC]</b> «¿En qué se le fue?» (pausa)">
   <div class="brand"><svg><use href="#logo"/></svg><b>lumi</b><small>FINANCE</small></div>
   <div class="z">
     <span class="kicker">Juan · domiciliario en Cali</span>
@@ -582,7 +591,7 @@ const timers = [];
 const later = (fn, ms) => timers.push(setTimeout(fn, ms));
 const clearTimers = () => { timers.forEach(clearTimeout); timers.length = 0; };
 
-function fit(){ deck.style.transform = `scale(${Math.min(innerWidth/1600, innerHeight/900)})`; }
+function fit(){ deck.style.transform = `translate(-50%,-50%) scale(${Math.min(innerWidth/1600, innerHeight/900)})`; }
 addEventListener("resize", fit); fit();
 
 /* ---- Ruta ---- */
@@ -696,7 +705,7 @@ function apply(){
   const sl = slides[cur];
   sl.dataset.step = step;
   sl.querySelectorAll("[data-show]").forEach(e => e.classList.toggle("on", step >= +e.dataset.show));
-  hooks[cur]?.step?.(step);
+  try { hooks[cur]?.step?.(step); } catch (e) { console.warn(e); }
   updateRoute();
 }
 function go(i, toStep = 0){
@@ -706,10 +715,10 @@ function go(i, toStep = 0){
   const sl = slides[i];
   if (changed){ sl.classList.remove("play"); void sl.offsetWidth; sl.classList.add("play"); }
   cur = i; step = toStep;
-  if (changed) hooks[cur]?.enter?.();
+  if (changed) try { hooks[cur]?.enter?.(); } catch (e) { console.warn(e); }
   apply(); updateRoute();
   document.getElementById("notes").innerHTML = sl.dataset.notes || "";
-  history.replaceState(null, "", "#" + (i + 1));
+  try { history.replaceState(null, "", "#" + (i + 1)); } catch (e) {}
 }
 function next(){
   if (step < +slides[cur].dataset.steps){ step++; apply(); }
@@ -749,7 +758,9 @@ function finalState(){
 addEventListener("beforeprint", finalState);
 window.finalState = finalState;
 
-go(Math.max(0, Math.min(N - 1, (parseInt(location.hash.slice(1)) || 1) - 1)));
+let startAt = 0;
+try { startAt = Math.max(0, Math.min(N - 1, (parseInt(location.hash.slice(1)) || 1) - 1)); } catch (e) {}
+go(startAt);
 </script>
 </body>
 </html>
