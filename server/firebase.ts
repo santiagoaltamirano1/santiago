@@ -31,7 +31,8 @@ export function firebase(): { app: App; db: Firestore } {
   const cfg = leerConfigFirebase();
   const projectId = process.env.FIREBASE_PROJECT_ID || cfg?.projectId;
   if (!projectId) throw new Error('FIREBASE_SIN_CONFIGURAR: falta firebase-applet-config.json (activa Firebase en AI Studio)');
-  const cuenta = process.env.FIREBASE_SERVICE_ACCOUNT;
+  // Solo se usa si parece un JSON real (AI Studio puede pedir un valor de relleno como "no").
+  const cuenta = (process.env.FIREBASE_SERVICE_ACCOUNT || '').trim().startsWith('{') ? process.env.FIREBASE_SERVICE_ACCOUNT!.trim() : '';
   const credencial = cuenta ? cert(JSON.parse(cuenta)) : process.env.FIRESTORE_EMULATOR_HOST ? null : applicationDefault();
   app = getApps()[0] || initializeApp({ projectId, ...(credencial ? { credential: credencial } : {}) });
   const base = process.env.FIRESTORE_DATABASE_ID || cfg?.firestoreDatabaseId;
