@@ -665,7 +665,7 @@ footer .brand .word{font-size:1.3rem}
 const CONFIG = {
   phone: "573246591009",            // tu número con código de país, sin + ni espacios
   phoneDisplay: "+57 324 659 1009", // cómo se ve en la página
-  waMessage: "Hola Lumi, quiero mis 2 meses gratis de 2027. Mis datos son:\nNombre:\nCiudad:\nCorreo:\nPlan que me interesa (Premium o VIP):",
+  waMessage: "¡Hola Lumi! 👋 Vi la página y quiero empezar 2027 con mi plata en orden. ¿Me cuentas cómo funciona lo de los 2 meses gratis?",
   launch: "2027-01-01T00:00:00-05:00"   // lanzamiento (hora Colombia)
 };
 
@@ -675,8 +675,8 @@ document.querySelectorAll("[data-wa]").forEach(a => a.href = waURL);
 document.querySelectorAll("[data-wa-plan]").forEach(a => {
   const plan = a.dataset.waPlan;
   const msg = plan === "Free"
-    ? "Hola Lumi, quiero empezar con el plan Free. Mis datos son:\nNombre:\nCiudad:\nCorreo:"
-    : `Hola Lumi, quiero el plan ${plan} con enero y febrero de 2027 gratis. Mis datos son:\nNombre:\nCiudad:\nCorreo:`;
+    ? "¡Hola Lumi! 👋 Quiero empezar a ordenar mi plata con el plan Free. ¿Me cuentas cómo funciona?"
+    : `¡Hola Lumi! 👋 Me llamó la atención el plan ${plan} y quiero empezar 2027 con mi plata en orden. ¿Me cuentas cómo aparto mis 2 meses gratis?`;
   a.href = "https://wa.me/" + CONFIG.phone + "?text=" + encodeURIComponent(msg);
 });
 document.querySelectorAll("[data-tel]").forEach(a => a.href = "tel:+" + CONFIG.phone);

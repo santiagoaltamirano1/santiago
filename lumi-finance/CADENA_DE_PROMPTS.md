@@ -64,7 +64,7 @@ Una **L** (estructura y orden) que abraza un **punto de luz dorado** (claridad).
 
 ### La oferta: lo que la mesa decidió
 
-**Lanzamiento:** 1 de enero de 2027. **Gancho:** quien se inscribe por WhatsApp y deja sus datos (nombre, ciudad y correo) tiene **enero y febrero de 2027 gratis** (100 % de descuento) en Premium o VIP. Desde marzo, Premium cuesta $19.900 y VIP $29.900 al mes. Free es gratis para siempre.
+**Lanzamiento:** 1 de enero de 2027. **Gancho:** quien se inscribe por WhatsApp y deja sus datos (tú se los pides en la conversación) tiene **enero y febrero de 2027 gratis** (100 % de descuento) en Premium o VIP. Desde marzo, Premium cuesta $19.900 y VIP $29.900 al mes. Free es gratis para siempre.
 
 | | **Free** | **Premium** · Recomendado | **VIP** · Exclusivo |
 |---|---|---|---|
@@ -186,7 +186,36 @@ Den las 5 mejoras de mayor impacto y apliquen las 3 primeras.
 
 ---
 
-## 3. Cómo cambiar tu número en el HTML (ya está puesto)
+## 3. Guion de WhatsApp: primero conexión, después datos
+
+El cliente llega con un mensaje corto y cálido que ya viene escrito desde la página (no pide datos):
+> ¡Hola Lumi! 👋 Me llamó la atención el plan Premium y quiero empezar 2027 con mi plata en orden. ¿Me cuentas cómo aparto mis 2 meses gratis?
+
+Tú respondes en **3 mensajes**, en este orden:
+
+**1 · Conexión (antes de vender nada)**
+> ¡Hola! Qué bueno que escribiste 🙌 Soy [tu nombre], de Lumi. Antes de contarte, una pregunta: si este año tu plata te hiciera caso, ¿qué es lo primero que quisieras lograr? (un viaje, salir de una deuda, por fin ahorrar…)
+
+*Por qué funciona:* lo haces hablar de su meta, no de tu producto. Quien dice su meta en voz alta ya se comprometió un poco con ella (principio de compromiso y coherencia).
+
+**2 · Puente (su meta + Lumi)**
+> Me encanta. Eso es justo para lo que hicimos Lumi: le hablas, anota tus gastos y te dice qué hacer primero para llegar a [su meta]. Lanzamos el 1 de enero y, como escribiste antes, tienes enero y febrero gratis en Premium o VIP.
+
+**3 · Datos (ya con confianza)**
+> Para apartarte tus 2 meses solo necesito:
+> 1. Tu nombre
+> 2. Tu ciudad
+> 3. Tu correo
+> 4. ¿Premium o VIP? (si dudas, te ayudo a elegir según tu meta)
+
+**Cierre**
+> ¡Listo, [nombre]! Quedaste inscrito ✨ El 1 de enero te escribo para activarlo, y antes de marzo te aviso para que elijas si sigues, cambias de plan o pasas a Free.
+
+*Consejo:* guarda los 4 mensajes como respuestas rápidas en WhatsApp Business, con atajos como `/hola`, `/puente`, `/datos` y `/listo`.
+
+---
+
+## 4. Cómo cambiar tu número en el HTML (ya está puesto)
 
 Abre `lumi-finance.html` con cualquier editor y busca `CONFIG` (cerca del final):
 
@@ -194,7 +223,7 @@ Abre `lumi-finance.html` con cualquier editor y busca `CONFIG` (cerca del final)
 const CONFIG = {
   phone: "573246591009",            // tu número con código de país, sin + ni espacios
   phoneDisplay: "+57 324 659 1009", // cómo se ve en la página
-  waMessage: "Hola Lumi, quiero encender la luz sobre mi plata."
+  waMessage: "¡Hola Lumi! 👋 Vi la página y quiero empezar 2027 con mi plata en orden..."
 };
 ```
 
