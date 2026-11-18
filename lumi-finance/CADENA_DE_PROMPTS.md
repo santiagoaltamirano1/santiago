@@ -62,6 +62,34 @@ Inspirada en las luciérnagas (cocuyos) de las noches colombianas. Cada color cu
 
 Una **L** (estructura y orden) que abraza un **punto de luz dorado** (claridad). Se lee como un sol que sale sobre una base firme. Funciona en una sola tinta, a 16 px y como foto de perfil de WhatsApp.
 
+### La oferta: lo que la mesa decidió
+
+**Lanzamiento:** 1 de enero de 2027. **Gancho:** quien se inscribe por WhatsApp y deja sus datos (nombre, ciudad y correo) tiene **enero y febrero de 2027 gratis** (100 % de descuento) en Premium o VIP. Desde marzo, Premium cuesta $19.900 y VIP $29.900 al mes. Free es gratis para siempre.
+
+| | **Free** | **Premium** · Recomendado | **VIP** · Exclusivo |
+|---|---|---|---|
+| Promesa | Para empezar a ordenar | Todo lo que necesitas para tomar el control | Una experiencia hecha a tu medida |
+| Precio | $0 | $19.900/mes | $29.900/mes |
+| Registro manual, cuentas COP/USD | ✓ | ✓ | ✓ |
+| Metas | 1 | Sin límite | Sin límite |
+| Registro por voz | 5 al mes (para probar) | Sin límite | Sin límite |
+| Asistente de finanzas con IA | — | Básico | **Agente avanzado de metas** que te acompaña semana a semana |
+| Informe y exportación | — | 1 por semana | Cuando quieras |
+| Proyecciones a 3, 6 y 12 meses | — | ✓ | ✓ |
+| Novedades | — | — | **Primero en cada actualización** |
+| Atención | — | WhatsApp | **Prioritaria** por WhatsApp |
+
+**Técnicas de persuasión, sin que se sienta como un robo:**
+1. **Efecto centro y señal de recomendación:** Premium va en el centro, en oscuro y con borde de luz. Es la opción «obvia».
+2. **Precio por día:** «menos de $700 al día: menos que un tinto». Convierte un gasto mensual en algo cotidiano.
+3. **Comparación con un señuelo:** VIP es «solo $10.000 más que Premium». Hace ver a VIP accesible y a Premium como una opción sensata.
+4. **Free honesto:** es útil de verdad, pero muestra tachado lo que no incluye. El cliente ve lo que se pierde sin que nadie se lo diga.
+5. **Reciprocidad y efecto de dotación:** 2 meses gratis. Quien registra su plata con voz y recibe informes no quiere volver atrás.
+6. **Urgencia real, no inventada:** cuenta regresiva al 1 de enero. Nada de «quedan 3 cupos» falsos.
+7. **Transparencia que da confianza:** «antes de marzo te avisamos para que elijas». Esto es lo que evita la sensación de robo.
+8. **VIP vende estatus y acompañamiento, no más funciones:** primero en las novedades, atención prioritaria y un agente que te lleva a tus metas.
+9. **Enmarcar el año nuevo:** «Empieza 2027 hablando con tu plata» aprovecha el efecto de nuevo comienzo.
+
 ---
 
 ## 2. Cadena de prompts (copiar y pegar en orden)
@@ -115,6 +143,17 @@ Por pantalla, indica: qué ve el cliente, qué siente sin darse cuenta (inconsci
 qué interacción hace y qué palanca psicológica usa. Veta cualquier pantalla que repita el problema.
 ```
 
+### Prompt 3.5 — La oferta y los planes
+
+```
+Con estas condiciones: lanzamiento el 1 de enero de 2027; 100 % de descuento en enero y febrero para quien se inscriba
+por WhatsApp y deje sus datos; Premium a $19.900/mes; VIP a $29.900/mes; Free con lo básico y voz limitada,
+la mesa diseña la tabla de planes. Premium debe cubrir lo que la mayoría necesita. VIP debe sentirse exclusivo
+(sin límites, agente avanzado de metas, primero en las novedades, atención prioritaria).
+Usen técnicas de persuasión éticas (efecto centro, precio por día, señuelo, reciprocidad, urgencia real)
+y digan cómo evitar que se sienta como un robo. El asesor de cumplimiento revisa las condiciones de la promo.
+```
+
 ### Prompt 4 — Copy
 
 ```
@@ -147,14 +186,14 @@ Den las 5 mejoras de mayor impacto y apliquen las 3 primeras.
 
 ---
 
-## 3. Cómo poner tu número en el HTML
+## 3. Cómo cambiar tu número en el HTML (ya está puesto)
 
 Abre `lumi-finance.html` con cualquier editor y busca `CONFIG` (cerca del final):
 
 ```js
 const CONFIG = {
-  phone: "573000000000",            // tu número con código de país, sin + ni espacios
-  phoneDisplay: "+57 300 000 0000", // cómo se ve en la página
+  phone: "573246591009",            // tu número con código de país, sin + ni espacios
+  phoneDisplay: "+57 324 659 1009", // cómo se ve en la página
   waMessage: "Hola Lumi, quiero encender la luz sobre mi plata."
 };
 ```

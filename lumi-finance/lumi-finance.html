@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lumi Finance · Enciende la luz sobre tu plata</title>
-<meta name="description" content="Lumi es la app que le enciende la luz a tu plata. Hablas, Lumi anota y te dice qué hacer primero. Escríbenos por WhatsApp.">
+<meta name="description" content="Lumi llega el 1 de enero de 2027. Inscríbete por WhatsApp y tienes enero y febrero gratis en Premium o VIP.">
 <meta name="theme-color" content="#150C2A">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23150C2A'/%3E%3Cpath d='M21 15v29h26' fill='none' stroke='%23FFF3EA' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='40' cy='24' r='5.5' fill='%23D4FF5E'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -263,6 +263,59 @@ footer .brand .word{font-size:1.3rem}
   .rv{opacity:1;transform:none}
 }
 
+
+/* ---------- Lanzamiento y planes ---------- */
+.launch{display:inline-flex;align-items:center;gap:10px;margin-bottom:22px;padding:.5rem 1rem;border-radius:999px;background:rgba(212,255,94,.1);border:1px solid rgba(212,255,94,.35);color:var(--on-dark);text-decoration:none;font-size:.9rem;font-weight:600}
+.launch b{color:var(--glow)}
+.launch .dot{width:8px;height:8px;border-radius:50%;background:var(--glow);box-shadow:0 0 10px var(--glow);animation:flicker 2.4s ease-in-out infinite}
+.offer{position:relative;overflow:hidden;display:grid;grid-template-columns:1.3fr .9fr;gap:40px;align-items:center;background:linear-gradient(135deg,var(--night) 0%,var(--night-3) 60%,#5A2A6E 100%);color:var(--on-dark);border-radius:40px;padding:clamp(28px,5vw,60px)}
+.offer::after{content:"";position:absolute;width:420px;height:420px;left:-140px;bottom:-240px;border-radius:50%;background:radial-gradient(circle,rgba(255,116,82,.45),transparent 65%);pointer-events:none}
+.offer > *{position:relative;z-index:1}
+.offer h2 em{color:var(--glow)}
+.offer p{margin-top:16px;color:var(--on-dark-2);font-size:1.1rem;max-width:32em}
+.offer p b{color:var(--on-dark)}
+.steps{list-style:none;display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.steps li{display:flex;align-items:center;gap:10px;padding:.55rem 1rem .55rem .55rem;border-radius:999px;background:rgba(255,255,255,.07);font-weight:700;font-size:.92rem}
+.steps li b{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--glow);color:var(--night);font-size:.8rem}
+.countdown{background:rgba(255,255,255,.06);border:1px solid rgba(212,255,94,.3);border-radius:28px;padding:28px;text-align:center;display:grid;gap:18px;justify-items:center}
+.cd-l{font-size:.8rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--on-dark-3)}
+.cd{display:flex;gap:12px}
+.cd div{min-width:78px;padding:14px 8px;border-radius:18px;background:var(--night);display:grid}
+.cd b{font-family:var(--serif);font-size:2.4rem;line-height:1;color:var(--glow);font-variant-numeric:tabular-nums}
+.cd span{font-size:.75rem;font-weight:700;color:var(--on-dark-3);margin-top:6px}
+.plans{display:grid;grid-template-columns:1fr 1.08fr 1fr;gap:20px;align-items:stretch;margin-top:50px}
+.plan{position:relative;background:var(--paper);border:1px solid var(--line);border-radius:30px;padding:32px 26px;display:flex;flex-direction:column;gap:14px}
+.plan h3{font-family:var(--serif);font-size:1.9rem;font-weight:600;line-height:1}
+.plan .tag{color:var(--ink-2);font-weight:600;min-height:2.9em}
+.price{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.price b{font-family:var(--serif);font-size:2.6rem;font-weight:700;letter-spacing:-.02em;line-height:1}
+.price span{font-size:.9rem;font-weight:600;color:var(--muted)}
+.perday{font-size:.88rem;font-weight:700;color:var(--gold-deep)}
+.free-months{align-self:flex-start;padding:.4rem .8rem;border-radius:999px;background:var(--glow);color:var(--night);font-weight:700;font-size:.9rem}
+.plan ul{list-style:none;display:grid;gap:11px;margin:6px 0 10px;flex:1}
+.plan li{position:relative;padding-left:30px;font-size:.95rem;font-weight:500}
+.plan li::before{content:"✓";position:absolute;left:0;top:2px;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:.7rem;font-weight:800;background:#FFE3D6;color:var(--gold-deep)}
+.plan li.no{color:var(--muted);text-decoration:line-through;text-decoration-color:rgba(118,105,138,.5)}
+.plan li.no::before{content:"–";background:#F3E8E2;color:var(--muted)}
+.plan .btn{justify-content:center}
+.plan-premium{background:var(--night);color:var(--on-dark);border:2px solid var(--glow);box-shadow:0 30px 70px -30px rgba(212,255,94,.55);transform:translateY(-14px)}
+.plan-premium .tag,.plan-premium .price span{color:var(--on-dark-2)}
+.plan-premium .perday{color:var(--glow)}
+.plan-premium li::before{background:rgba(212,255,94,.18);color:var(--glow)}
+.plan-vip{background:linear-gradient(160deg,#FFF3EA 0%,#FFE0D0 100%);border:2px solid transparent;background-clip:padding-box;box-shadow:0 0 0 2px #FF7452,0 30px 60px -35px rgba(255,116,82,.7)}
+.badge{position:absolute;top:-14px;left:26px;padding:.35rem .9rem;border-radius:999px;font-size:.75rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:var(--glow);color:var(--night)}
+.plan-vip .badge{background:linear-gradient(90deg,#FF7452,#C2391F);color:#fff}
+.btn-vip{background:linear-gradient(90deg,#FF7452,#E0502F);color:#fff;box-shadow:0 12px 30px -10px rgba(255,116,82,.8)}
+.plan-vip .free-months{background:var(--night);color:var(--glow)}
+.plans-note{text-align:center;max-width:46em;margin:34px auto 0;font-size:.85rem;color:var(--muted)}
+@media (max-width:960px){
+  .offer{grid-template-columns:1fr}
+  .plans{grid-template-columns:1fr;max-width:480px;margin-inline:auto}
+  .plan-premium{transform:none;order:-2}
+  .plan-vip{order:-1}
+  .plan .tag{min-height:0}
+}
+
 /* ---------- Luciérnagas: la firma memorable ---------- */
 .flies{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0}
 .hero > .wrap,.dawn .wrap{position:relative;z-index:1}
@@ -300,22 +353,23 @@ footer .brand .word{font-size:1.3rem}
         <svg width="42" height="42"><use href="#i-logo"/></svg>
         <span class="word">lumi<small>FINANCE</small></span>
       </a>
-      <a class="nav-call" data-tel href="tel:+573000000000"><svg width="18" height="18"><use href="#i-call"/></svg><span data-phone-text>+57 300 000 0000</span></a>
+      <a class="nav-call" data-tel href="tel:+573246591009"><svg width="18" height="18"><use href="#i-call"/></svg><span data-phone-text>+57 324 659 1009</span></a>
     </div>
   </nav>
 
   <div class="wrap">
     <div>
+      <a class="launch" href="#planes"><span class="dot" aria-hidden="true"></span>Llega el 1 de enero · <b>enero y febrero gratis</b></a>
       <h1>
         <span class="q">¿Sabes a dónde se fue tu plata este mes?</span>
         <span class="answer">Ahora sí lo sabes.</span>
       </h1>
       <p class="sub"><b>Lumi</b> es la app que le enciende la luz a tu plata. Le hablas, ella anota, y te dice con tus propias cifras <b>qué hacer primero</b>.</p>
       <div class="ctas">
-        <a class="btn btn-wa" data-wa href="https://wa.me/573000000000" target="_blank" rel="noopener"><svg><use href="#i-wa"/></svg>Quiero mi acceso</a>
-        <a class="btn btn-ghost" data-tel href="tel:+573000000000"><svg><use href="#i-call"/></svg>Llamar</a>
+        <a class="btn btn-wa" data-wa href="https://wa.me/573246591009" target="_blank" rel="noopener"><svg><use href="#i-wa"/></svg>Quiero mis 2 meses gratis</a>
+        <a class="btn btn-ghost" data-tel href="tel:+573246591009"><svg><use href="#i-call"/></svg>Llamar</a>
       </div>
-      <p class="hero-phone">Te responde una persona, no un bot: <a data-tel href="tel:+573000000000" data-phone-text>+57 300 000 0000</a></p>
+      <p class="hero-phone">Escríbenos, déjanos tus datos y quedas inscrito. Te responde una persona: <a data-tel href="tel:+573246591009" data-phone-text>+57 324 659 1009</a></p>
     </div>
 
     <div style="position:relative">
@@ -472,16 +526,104 @@ footer .brand .word{font-size:1.3rem}
   </div>
 </section>
 
-<!-- ============ 7 · PREGUNTAS ============ -->
+<!-- ============ 7 · OFERTA DE LANZAMIENTO Y PLANES ============ -->
+<section class="block pricing" id="planes" style="padding-top:20px">
+  <div class="wrap">
+    <div class="offer rv">
+      <div class="offer-txt">
+        <span class="eyebrow" style="color:var(--glow)">Oferta de fundadores · lanzamiento 1 de enero de 2027</span>
+        <h2>Empieza 2027 <em>hablando con tu plata.</em></h2>
+        <p>Inscríbete por WhatsApp antes del lanzamiento, déjanos tus datos y usa <b>enero y febrero gratis</b> (100 % de descuento) en el plan que elijas: Premium o VIP.</p>
+        <ol class="steps">
+          <li><b>1</b>Escríbenos por WhatsApp</li>
+          <li><b>2</b>Déjanos tus datos</li>
+          <li><b>3</b>El 1 de enero activas tu plan</li>
+        </ol>
+      </div>
+      <div class="countdown" aria-live="polite">
+        <span class="cd-l" id="cdLabel">Faltan para el lanzamiento</span>
+        <div class="cd" id="cd">
+          <div><b id="cdD">--</b><span>días</span></div>
+          <div><b id="cdH">--</b><span>horas</span></div>
+          <div><b id="cdM">--</b><span>min</span></div>
+        </div>
+        <a class="btn btn-wa" data-wa href="https://wa.me/573246591009" target="_blank" rel="noopener"><svg><use href="#i-wa"/></svg>Inscribirme gratis</a>
+      </div>
+    </div>
+
+    <div class="rv" style="text-align:center;margin-top:90px">
+      <span class="eyebrow">Planes</span>
+      <h2>Elige cuánta luz quieres.</h2>
+      <p class="lead" style="margin:14px auto 0">Empieza gratis cuando quieras. Cambias o cancelas cuando quieras.</p>
+    </div>
+
+    <div class="plans">
+      <article class="plan rv">
+        <h3>Free</h3>
+        <p class="tag">Para empezar a ordenar</p>
+        <div class="price"><b>$0</b><span>para siempre</span></div>
+        <ul>
+          <li>Registro manual de gastos, ingresos y transferencias</li>
+          <li>Cuentas en pesos y dólares</li>
+          <li>1 meta de ahorro y control de deudas</li>
+          <li>5 registros por voz al mes, para que lo pruebes</li>
+          <li class="no">Asistente de finanzas con IA</li>
+          <li class="no">Informe y exportación de tu documento</li>
+        </ul>
+        <a class="btn btn-ghost" data-wa-plan="Free" href="https://wa.me/573246591009" target="_blank" rel="noopener">Empezar gratis</a>
+      </article>
+
+      <article class="plan plan-premium rv">
+        <span class="badge">Recomendado</span>
+        <h3>Premium</h3>
+        <p class="tag">Todo lo que necesitas para tomar el control</p>
+        <div class="free-months">Enero y febrero: <b>$0</b></div>
+        <div class="price"><b>$19.900</b><span>al mes, desde marzo</span></div>
+        <p class="perday">Menos de $700 al día: menos que un tinto.</p>
+        <ul>
+          <li>Todo lo de Free, con metas sin límite</li>
+          <li><b>Registra hablando</b>, sin límite de dictados</li>
+          <li>Asistente de finanzas personales</li>
+          <li>Informe y exportación 1 vez por semana</li>
+          <li>Proyecciones a 3, 6 y 12 meses</li>
+          <li>Soporte por WhatsApp</li>
+        </ul>
+        <a class="btn btn-wa" data-wa-plan="Premium" href="https://wa.me/573246591009" target="_blank" rel="noopener"><svg><use href="#i-wa"/></svg>Quiero Premium gratis</a>
+      </article>
+
+      <article class="plan plan-vip rv">
+        <span class="badge">Exclusivo</span>
+        <h3>VIP</h3>
+        <p class="tag">Una experiencia hecha a tu medida</p>
+        <div class="free-months">Enero y febrero: <b>$0</b></div>
+        <div class="price"><b>$29.900</b><span>al mes, desde marzo</span></div>
+        <p class="perday">Solo $10.000 más que Premium.</p>
+        <ul>
+          <li>Todo lo de Premium, <b>sin ningún límite</b></li>
+          <li>Informes y exportaciones cuando quieras</li>
+          <li><b>Agente avanzado de metas</b>: arma tu plan y te acompaña semana a semana</li>
+          <li>Recibes primero cada actualización y función nueva</li>
+          <li>Atención prioritaria por WhatsApp</li>
+        </ul>
+        <a class="btn btn-vip" data-wa-plan="VIP" href="https://wa.me/573246591009" target="_blank" rel="noopener"><svg><use href="#i-wa"/></svg>Quiero VIP gratis</a>
+      </article>
+    </div>
+    <p class="plans-note rv">Precios en pesos colombianos. Los 2 meses gratis aplican a quienes se inscriban por WhatsApp antes del lanzamiento. Antes de marzo te avisamos para que elijas si sigues, cambias de plan o pasas a Free.</p>
+  </div>
+</section>
+
+<!-- ============ 8 · PREGUNTAS ============ -->
 <section class="block" style="padding-top:20px">
   <div class="wrap">
     <div class="rv" style="text-align:center">
-      <span class="eyebrow">Antes de escribirnos</span>
+      <span class="eyebrow">Antes de inscribirte</span>
       <h2>Lo que suelen preguntarnos</h2>
     </div>
     <div class="faq rv">
       <details><summary>¿Necesito saber de finanzas?</summary><p>No. Lumi está hecha justo para quien nunca aprendió. Tú hablas como hablas, y Lumi te devuelve todo claro y en orden.</p></details>
-      <details><summary>¿Cómo consigo acceso?</summary><p>Escríbenos por WhatsApp o llámanos. Te contamos cómo empezar y te acompañamos en tu primer registro.</p></details>
+      <details><summary>¿Cómo consigo los 2 meses gratis?</summary><p>Escríbenos por WhatsApp antes del 1 de enero de 2027 y déjanos tus datos (nombre, ciudad y correo). Quedas inscrito, y enero y febrero de 2027 te salen en $0 en Premium o VIP.</p></details>
+      <details><summary>¿Qué pasa en marzo?</summary><p>Desde marzo, Premium cuesta $19.900 y VIP $29.900 al mes. Antes de que termine febrero te avisamos, y tú decides si sigues, cambias de plan o te quedas en Free.</p></details>
+      <details><summary>¿Cuál es la diferencia entre Premium y VIP?</summary><p>Premium cubre lo que la mayoría necesita: registrar hablando, tu asistente de finanzas y un informe cada semana. VIP es para quien quiere ir por sus metas con todo: sin límites, con un agente avanzado que te acompaña, las funciones nuevas antes que nadie y atención prioritaria.</p></details>
       <details><summary>¿Qué pasa con mis datos?</summary><p>Son tuyos. Cuando generas tu informe para la IA, Lumi reemplaza los nombres de otras personas (por ejemplo, «Persona A») y recorta tus notas.</p></details>
       <details><summary>¿Lumi me dice en qué invertir?</summary><p>No. Lumi te muestra cómo vas y qué podrías mejorar con tus propios datos. Las decisiones siempre son tuyas.</p></details>
     </div>
@@ -493,11 +635,11 @@ footer .brand .word{font-size:1.3rem}
   <div class="wrap rv">
     <svg class="icon-big"><use href="#i-logo"/></svg>
     <h2>Enciende la luz.</h2>
-    <p>Un mensaje y empiezas hoy. Escríbenos o llámanos directo:</p>
-    <a class="bignum" data-tel href="tel:+573000000000" data-phone-text>+57 300 000 0000</a>
+    <p>Un mensaje con tus datos y empiezas 2027 con <b>enero y febrero gratis</b>. Escríbenos o llámanos directo:</p>
+    <a class="bignum" data-tel href="tel:+573246591009" data-phone-text>+57 324 659 1009</a>
     <div class="ctas">
-      <a class="btn btn-wa" data-wa href="https://wa.me/573000000000" target="_blank" rel="noopener"><svg><use href="#i-wa"/></svg>Escribir por WhatsApp</a>
-      <a class="btn btn-ghost" data-tel href="tel:+573000000000"><svg><use href="#i-call"/></svg>Llamar ahora</a>
+      <a class="btn btn-wa" data-wa href="https://wa.me/573246591009" target="_blank" rel="noopener"><svg><use href="#i-wa"/></svg>Inscribirme por WhatsApp</a>
+      <a class="btn btn-ghost" data-tel href="tel:+573246591009"><svg><use href="#i-call"/></svg>Llamar ahora</a>
     </div>
     <small><button class="copy-btn" id="copyBtn" type="button">Copiar número</button></small>
   </div>
@@ -506,14 +648,14 @@ footer .brand .word{font-size:1.3rem}
 <footer>
   <div class="wrap">
     <a class="brand" href="#hero"><svg width="34" height="34"><use href="#i-logo"/></svg><span class="word">lumi<small>FINANCE</small></span></a>
-    <span>© <span id="yr">2026</span> Lumi Finance · Colombia · <a data-tel href="tel:+573000000000" data-phone-text>+57 300 000 0000</a></span>
+    <span>© <span id="yr">2026</span> Lumi Finance · Colombia · <a data-tel href="tel:+573246591009" data-phone-text>+57 324 659 1009</a></span>
   </div>
 </footer>
 
-<a class="fab" data-wa href="https://wa.me/573000000000" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp"><svg style="color:#fff"><use href="#i-wa"/></svg></a>
+<a class="fab" data-wa href="https://wa.me/573246591009" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp"><svg style="color:#fff"><use href="#i-wa"/></svg></a>
 <nav class="mbar" aria-label="Contacto rápido">
-  <a class="m-call" data-tel href="tel:+573000000000"><svg><use href="#i-call"/></svg>Llamar</a>
-  <a class="m-wa" data-wa href="https://wa.me/573000000000" target="_blank" rel="noopener"><svg><use href="#i-wa"/></svg>WhatsApp</a>
+  <a class="m-call" data-tel href="tel:+573246591009"><svg><use href="#i-call"/></svg>Llamar</a>
+  <a class="m-wa" data-wa href="https://wa.me/573246591009" target="_blank" rel="noopener"><svg><use href="#i-wa"/></svg>WhatsApp</a>
 </nav>
 
 <script>
@@ -521,15 +663,38 @@ footer .brand .word{font-size:1.3rem}
    CONFIG — CAMBIA SOLO ESTO
    ========================================================= */
 const CONFIG = {
-  phone: "573000000000",            // tu número con código de país, sin + ni espacios
-  phoneDisplay: "+57 300 000 0000", // cómo se ve en la página
-  waMessage: "Hola Lumi, quiero encender la luz sobre mi plata. ¿Cómo consigo acceso?"
+  phone: "573246591009",            // tu número con código de país, sin + ni espacios
+  phoneDisplay: "+57 324 659 1009", // cómo se ve en la página
+  waMessage: "Hola Lumi, quiero mis 2 meses gratis de 2027. Mis datos son:\nNombre:\nCiudad:\nCorreo:\nPlan que me interesa (Premium o VIP):",
+  launch: "2027-01-01T00:00:00-05:00"   // lanzamiento (hora Colombia)
 };
 
 /* ---- Rellena todos los enlaces con el número ---- */
 const waURL = "https://wa.me/" + CONFIG.phone + "?text=" + encodeURIComponent(CONFIG.waMessage);
 document.querySelectorAll("[data-wa]").forEach(a => a.href = waURL);
+document.querySelectorAll("[data-wa-plan]").forEach(a => {
+  const plan = a.dataset.waPlan;
+  const msg = plan === "Free"
+    ? "Hola Lumi, quiero empezar con el plan Free. Mis datos son:\nNombre:\nCiudad:\nCorreo:"
+    : `Hola Lumi, quiero el plan ${plan} con enero y febrero de 2027 gratis. Mis datos son:\nNombre:\nCiudad:\nCorreo:`;
+  a.href = "https://wa.me/" + CONFIG.phone + "?text=" + encodeURIComponent(msg);
+});
 document.querySelectorAll("[data-tel]").forEach(a => a.href = "tel:+" + CONFIG.phone);
+
+/* ---- Cuenta regresiva al lanzamiento ---- */
+(function tick(){
+  const left = new Date(CONFIG.launch) - Date.now();
+  if (left <= 0){
+    document.getElementById("cdLabel").textContent = "¡Lumi ya está aquí!";
+    document.getElementById("cd").style.display = "none";
+    return;
+  }
+  const pad = n => String(n).padStart(2, "0");
+  document.getElementById("cdD").textContent = Math.floor(left / 864e5);
+  document.getElementById("cdH").textContent = pad(Math.floor(left / 36e5) % 24);
+  document.getElementById("cdM").textContent = pad(Math.floor(left / 6e4) % 60);
+  setTimeout(tick, 30000);
+})();
 document.querySelectorAll("[data-phone-text]").forEach(el => el.textContent = CONFIG.phoneDisplay);
 document.getElementById("yr").textContent = new Date().getFullYear();
 
