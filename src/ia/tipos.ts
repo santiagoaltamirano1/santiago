@@ -1,4 +1,4 @@
-// Iteración 2 · F3 · Forma exacta de lo que devuelven /api/exportar (server/reportes.ts).
+// Iteración 2 · F3 · Forma exacta de lo que devuelven /api/exportar (motor/reportes.ts).
 // Estos tipos no dependen de la base de datos: los usan exportService (app) y las funciones puras (scripts de prueba).
 
 export type TipoMov =
@@ -20,7 +20,7 @@ export interface FilaMovimiento {
   monto: number;
   moneda: string;
   tasa_cop: number | null;
-  cop: number;                 // en COP con la regla de /api/resumen (server/reportes.ts) (ajuste con signo)
+  cop: number;                 // en COP con la regla de /api/resumen (motor/reportes.ts) (ajuste con signo)
   efecto_cuenta: -1 | 0 | 1;
   saldo_anterior: number | null;
   saldo_nuevo: number | null;

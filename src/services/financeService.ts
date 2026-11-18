@@ -5,7 +5,7 @@ import { Transaccion, Cuenta, Categoria, Meta, Deuda } from '../types';
 
 // ---------------------------------------------------------------------------
 // Datos en Firestore: usuarios/{uid}/cuentas|categorias|metas|deudas|movimientos (solo lectura para la app).
-// Escrituras: siempre por el servidor (/api/*), que aplica las reglas de dinero (server/dinero.ts).
+// Escrituras (versión demo): el motor (motor/, en el navegador) aplica las reglas de dinero en una transacción de Firestore.
 // ---------------------------------------------------------------------------
 const C = {
   accounts: 'cuentas',
@@ -59,7 +59,7 @@ export interface CommitTransactionPayload {
 }
 
 // ---------------------------------------------------------------------------
-// MÓDULO 1: COMMIT TRANSACCIONAL (servidor: POST /api/movimientos → server/dinero.ts registrarMovimiento)
+// MÓDULO 1: COMMIT TRANSACCIONAL (servidor: POST /api/movimientos → motor/dinero.ts registrarMovimiento)
 // El cliente NO decide user_id ni toca saldos. Los errores se PROPAGAN.
 // ---------------------------------------------------------------------------
 export async function executeIdempotentTransaction(payload: CommitTransactionPayload): Promise<void> {

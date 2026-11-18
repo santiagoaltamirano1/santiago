@@ -1,8 +1,9 @@
-// Prueba de punta a punta del servidor contra los EMULADORES de Firebase (sin internet, sin tocar datos reales).
-// Ejecutar:  npm run prueba:servidor
-//   (= firebase emulators:exec --only auth,firestore --project demo-lumi "tsx scripts/prueba-servidor-firebase.ts")
-// Cubre las mismas reglas que las pruebas SQL de Supabase: registrar, transferir, ajustar, dólares, metas, deudas,
-// repetidos (idempotencia), datos ajenos, permisos de lectura/escritura, resumen, exportar, tasas y voz.
+// Prueba de punta a punta de la VERSIÓN DE PRUEBA (Starter Tier) contra los EMULADORES de Firebase (sin internet).
+// Ejecutar:  npm run prueba:motor
+// La app (motor/) escribe en Firestore con el SDK cliente, como cada persona, bajo firestore.rules.
+// El servidor solo hace la voz (Gemini, aquí SIMULADO) y las tasas.
+// Cubre: registrar, transferir, ajustar, dólares, metas, deudas, repetidos, datos ajenos, permisos de Firestore,
+// resumen, exportar, tasas y voz.
 process.env.LUMI_NO_ARRANCAR = '1';
 process.env.FIREBASE_PROJECT_ID ||= 'demo-lumi';
 process.env.TASAS_DESACTIVADAS = '1';
@@ -11,17 +12,21 @@ import { randomUUID } from 'node:crypto';
 import type { AddressInfo } from 'node:net';
 import { initializeApp as appCliente } from 'firebase/app';
 import { getAuth as authCliente, connectAuthEmulator, signInWithEmailAndPassword } from 'firebase/auth';
-import { getFirestore as dbCliente, connectFirestoreEmulator, doc, getDoc, setDoc, collection, getDocs } from 'firebase/firestore';
+import { initializeFirestore, connectFirestoreEmulator, doc, getDoc, setDoc, collection, getDocs, deleteDoc, type Firestore } from 'firebase/firestore';
+import { initializeApp as appAdmin } from 'firebase-admin/app';
+import { getFirestore as dbAdmin } from 'firebase-admin/firestore';
 
 const { crearApp } = await import('../server');
-const { firebase, col, colTasas, docConfig } = await import('../server/firebase');
-const { refrescarTasaDelDia } = await import('../server/tasas');
-const { hoyBogota } = await import('../server/util');
+const { usarBd } = await import('../motor/bd');
+const { usarTasas } = await import('../motor/tasas');
+const { ejecutarLocal, esRutaLocal, ErrorNegocio } = await import('../motor/rutas');
+const { hoyBogota } = await import('../motor/util');
+const { filtrarTrm, armarVigentes } = await import('../server/tasas');
 const { usarClienteDePrueba, aEsquemaGemini, aEsquemaOpenApi } = await import('../server/voz/gemini');
 const { esquema } = await import('../server/voz/prompt');
 
 if (!process.env.FIRESTORE_EMULATOR_HOST || !process.env.FIREBASE_AUTH_EMULATOR_HOST) {
-  console.error('Esta prueba solo corre con los emuladores (npm run prueba:servidor).'); process.exit(1);
+  console.error('Esta prueba solo corre con los emuladores (npm run prueba:motor).'); process.exit(1);
 }
 
 let ok = 0, mal = 0;
@@ -30,28 +35,54 @@ const caso = (n: string, c: boolean, d: unknown = '') => { if (c) ok++; else { m
 const servidor = crearApp().listen(0);
 const base = `http://127.0.0.1:${(servidor.address() as AddressInfo).port}`;
 const PROYECTO = process.env.FIREBASE_PROJECT_ID!;
+const [hostFs, puertoFs] = process.env.FIRESTORE_EMULATOR_HOST!.split(':');
+usarTasas(() => ({ tasas: { usd: 4100, eur: 4450 }, vigentes: [] }));
 
-async function crearUsuario(correo: string) {
+// Firestore "de administrador" solo para VERIFICAR lo guardado (en el emulador no pasa por las reglas)
+const adm = dbAdmin(appAdmin({ projectId: PROYECTO }));
+const col = (uid: string, c: string) => adm.collection('usuarios').doc(uid).collection(c);
+const leer = async (uid: string, c: string, id: string) => (await col(uid, c).doc(id).get()).data() as any;
+
+interface Usuario { uid: string; token: string; correo: string; db: Firestore }
+async function crearUsuario(correo: string): Promise<Usuario> {
+  const app = appCliente({ projectId: PROYECTO, apiKey: 'demo', authDomain: 'demo' }, correo);
+  const auth = authCliente(app); connectAuthEmulator(auth, `http://${process.env.FIREBASE_AUTH_EMULATOR_HOST}`, { disableWarnings: true });
   const r = await fetch(`http://${process.env.FIREBASE_AUTH_EMULATOR_HOST}/identitytoolkit.googleapis.com/v1/accounts:signUp?key=demo`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: correo, password: 'clave-123456', returnSecureToken: true }),
   });
-  const j = await r.json();
-  return { uid: j.localId as string, token: j.idToken as string, correo };
+  await r.json();
+  const cred = await signInWithEmailAndPassword(auth, correo, 'clave-123456');
+  const db = initializeFirestore(app, { ignoreUndefinedProperties: true }); connectFirestoreEmulator(db, hostFs, Number(puertoFs));
+  return { uid: cred.user.uid, token: await cred.user.getIdToken(), correo, db };
 }
-const api = (token: string | null) => async (metodo: string, ruta: string, cuerpo?: unknown) => {
+const alServidor = async (token: string | null, metodo: string, ruta: string, cuerpo?: unknown) => {
   const r = await fetch(base + ruta, { method: metodo, headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) }, body: cuerpo ? JSON.stringify(cuerpo) : undefined });
   const j: any = await r.json().catch(() => ({}));
-  return Array.isArray(j) ? Object.assign(j, { status: r.status }) : { status: r.status, ...j };
+  if (!r.ok) { const e: any = new Error(j?.error?.message || `HTTP ${r.status}`); e.status = r.status; e.code = j?.error?.code; throw e; }
+  return j;
 };
-const leer = async (uid: string, c: any, id: string) => (await col(uid, c).doc(id).get()).data() as any;
+/** Igual que src/services/api.ts: lo local va al motor (como esa persona) y lo demás al servidor. Errores → { status, error }. */
+const api = (u: Usuario | null) => async (metodo: string, ruta: string, cuerpo?: unknown): Promise<any> => {
+  try {
+    let j: any;
+    if (u && esRutaLocal(metodo, ruta)) {
+      usarBd(u.db);
+      j = await ejecutarLocal(u.uid, metodo, ruta, cuerpo, (b) => alServidor(u.token, 'POST', '/api/voz/organizar', b));
+    } else j = await alServidor(u?.token ?? null, metodo, ruta, cuerpo);
+    return Array.isArray(j) ? Object.assign(j, { status: 200 }) : { status: 200, ...j };
+  } catch (e: any) {
+    if (e instanceof ErrorNegocio) return { status: e.status, error: { code: e.codigo, message: e.message } };
+    return { status: e?.status || 500, error: { code: e?.code || 'ERROR', message: e?.message } };
+  }
+};
 
 // ------------------------------------------------------------------ sesión
 const ana = await crearUsuario(`ana.${Date.now()}@prueba.co`);
 const beto = await crearUsuario(`beto.${Date.now()}@prueba.co`);
-const A = api(ana.token), B = api(beto.token);
-caso('Sin sesión → 401', (await api(null)('GET', '/api/resumen')).status === 401);
-caso('Token falso → 401', (await api('x.y.z')('GET', '/api/resumen')).status === 401);
-caso('Salud responde (sin IA en la prueba)', (await api(null)('GET', '/api/salud')).firebase?.firestore === 'ok');
+const A = api(ana), B = api(beto);
+caso('Servidor: voz sin sesión → 401', (await api(null)('POST', '/api/voz/organizar', { texto: 'hola mundo' })).status === 401);
+caso('Servidor: token falso → 401', (await alServidor('x.y.z', 'POST', '/api/voz/organizar', {}).catch((e) => e)).status === 401);
+caso('Salud responde (modo: la app escribe; sin IA en la prueba)', ((s) => s.ia?.llave === false && /firestore\.rules/.test(s.firebase?.modo))(await api(null)('GET', '/api/salud')));
 
 // ------------------------------------------------------------------ semilla
 caso('Semilla: crea la primera vez', (await A('POST', '/api/semilla', {})).creo === true);
@@ -149,30 +180,31 @@ const idAna = g1.id;
 r = await B('POST', '/api/movimientos', { ...g1, cuenta_id: (await col(beto.uid, 'cuentas').limit(1).get()).docs[0].id, categoria_id: catB });
 caso('El mismo id en otra persona es OTRO movimiento (no pisa el de Ana)', r.id === idAna && (await leer(ana.uid, 'movimientos', idAna)).user_id === ana.uid);
 
-// ------------------------------------------------------------------ permisos de Firestore (lo que ve la app)
-const cli = appCliente({ projectId: PROYECTO, apiKey: 'demo', authDomain: 'demo' }, 'cliente');
-const authC = authCliente(cli); connectAuthEmulator(authC, `http://${process.env.FIREBASE_AUTH_EMULATOR_HOST}`, { disableWarnings: true });
-const dbC = dbCliente(cli); const [h, p] = process.env.FIRESTORE_EMULATOR_HOST!.split(':'); connectFirestoreEmulator(dbC, h, Number(p));
+// ------------------------------------------------------------------ permisos de Firestore (firestore.rules)
 const intento = async (f: () => Promise<unknown>) => { try { await f(); return 'ok'; } catch (e: any) { return e?.code || 'error'; } };
-caso('Sin sesión no se lee nada', (await intento(() => getDoc(doc(dbC, 'usuarios', ana.uid, 'cuentas', efe)))) === 'permission-denied');
-await signInWithEmailAndPassword(authC, ana.correo, 'clave-123456');
-caso('Ana lee sus cuentas', (await getDocs(collection(dbC, 'usuarios', ana.uid, 'cuentas'))).size === 3);
-caso('Ana NO lee las cuentas de Beto', (await intento(() => getDocs(collection(dbC, 'usuarios', beto.uid, 'cuentas')))) === 'permission-denied');
-caso('Ana NO puede escribir su saldo directo', (await intento(() => setDoc(doc(dbC, 'usuarios', ana.uid, 'cuentas', efe), { saldo_actual: 9e9 }, { merge: true }))) === 'permission-denied');
-caso('Ana NO puede inventar un movimiento directo', (await intento(() => setDoc(doc(dbC, 'usuarios', ana.uid, 'movimientos', randomUUID()), { monto: 1 }))) === 'permission-denied');
-caso('Ana NO puede cambiar las tasas', (await intento(() => setDoc(doc(dbC, 'sistema', 'config'), { usd_cop: 1 }))) === 'permission-denied');
-caso('Ana lee las tasas', (await intento(() => getDocs(collection(dbC, 'tasas')))) === 'ok');
+const anonimo = initializeFirestore(appCliente({ projectId: PROYECTO, apiKey: 'demo' }, 'anonimo'), {}); connectFirestoreEmulator(anonimo, hostFs, Number(puertoFs));
+caso('Sin sesión no se lee nada', (await intento(() => getDoc(doc(anonimo, 'usuarios', ana.uid, 'cuentas', efe)))) === 'permission-denied');
+caso('Sin sesión no se escribe nada', (await intento(() => setDoc(doc(anonimo, 'usuarios', ana.uid, 'cuentas', 'x'), { a: 1 }))) === 'permission-denied');
+caso('Ana lee sus cuentas', (await getDocs(collection(ana.db, 'usuarios', ana.uid, 'cuentas'))).size === 3);
+caso('Ana NO lee las cuentas de Beto', (await intento(() => getDocs(collection(ana.db, 'usuarios', beto.uid, 'cuentas')))) === 'permission-denied');
+caso('Ana NO escribe en los datos de Beto', (await intento(() => setDoc(doc(ana.db, 'usuarios', beto.uid, 'movimientos', randomUUID()), { monto: 1, user_id: ana.uid }))) === 'permission-denied');
+caso('Ana NO crea en su espacio algo a nombre de Beto', (await intento(() => setDoc(doc(ana.db, 'usuarios', ana.uid, 'movimientos', randomUUID()), { monto: 1, user_id: beto.uid }))) === 'permission-denied');
+caso('Nada se borra de verdad (delete bloqueado)', (await intento(() => deleteDoc(doc(ana.db, 'usuarios', ana.uid, 'cuentas', efe)))) === 'permission-denied');
+caso('Fuera de usuarios/ todo cerrado', (await intento(() => setDoc(doc(ana.db, 'sistema', 'config'), { usd_cop: 1 }))) === 'permission-denied' && (await intento(() => getDocs(collection(ana.db, 'tasas')))) === 'permission-denied');
 
 // ------------------------------------------------------------------ tasas
 const ayer = new Date(Date.now() - 864e5 - 5 * 3600e3).toISOString().slice(0, 10);
 const manana = new Date(Date.now() + 864e5 - 5 * 3600e3).toISOString().slice(0, 10);
-await colTasas().doc(`USD_${ayer}_TRM`).set({ moneda: 'USD', cop_por_unidad: 4000, vigente_desde: ayer, vigente_hasta: hoy, fuente: 'TRM Superfinanciera', consultado_en: new Date().toISOString() });
-await colTasas().doc(`USD_${manana}_TRM`).set({ moneda: 'USD', cop_por_unidad: 4010, vigente_desde: manana, vigente_hasta: manana, fuente: 'TRM Superfinanciera', consultado_en: new Date().toISOString() });
-await colTasas().doc(`EUR_${ayer}_BCE`).set({ moneda: 'EUR', cop_por_unidad: 4400, vigente_desde: ayer, vigente_hasta: null, fuente: 'BCE × TRM', consultado_en: new Date().toISOString() });
-const tv = await A('GET', '/api/tasas');
-caso('Tasas vigentes: USD 4.000, EUR 4.400 y la próxima TRM 4.010', Array.isArray(tv) && tv.length === 3 && tv.find((x: any) => x.moneda === 'USD' && !x.proxima)?.cop_por_unidad === 4000 && tv.find((x: any) => x.proxima)?.cop_por_unidad === 4010, tv);
-await refrescarTasaDelDia();
-caso('Tasa del día copiada a sistema/config', (await docConfig().get()).data()?.usd_cop === 4000);
+const trm = filtrarTrm([
+  { valor: '4000', vigenciadesde: `${ayer}T00:00:00.000`, vigenciahasta: `${hoy}T00:00:00.000` },
+  { valor: '4010', vigenciadesde: `${manana}T00:00:00.000`, vigenciahasta: `${manana}T00:00:00.000` },
+  { valor: '400', vigenciadesde: '2020-01-01T00:00:00.000' },
+]);
+caso('TRM: descarta valores raros (400)', trm.length === 2 && trm[0].valor === 4000);
+const tv = armarVigentes(trm, 1.1, ayer, hoy);
+caso('Tasas vigentes: USD 4.000, EUR 4.400 (1,1 × 4.000) y la próxima TRM 4.010', tv.length === 3 && tv.find((x) => x.moneda === 'USD' && !x.proxima)?.cop_por_unidad === 4000 && tv.find((x) => x.moneda === 'EUR')?.cop_por_unidad === 4400 && tv.find((x) => x.proxima)?.cop_por_unidad === 4010, tv);
+caso('GET /api/tasas responde sin sesión (lista)', Array.isArray(await api(null)('GET', '/api/tasas')));
+usarTasas(() => ({ tasas: { usd: 4000, eur: 4400 }, vigentes: tv.filter((x) => !x.proxima) }));
 r = await A('POST', '/api/movimientos', mov({ tipo: 'transferencia', monto: 10, cuenta_id: usd, destino_cuenta_id: aho }));
 caso('Con la tasa nueva, US$10 = 40.000', ((m) => m.tasa_cop === 4000 && m.monto_aplicado === 40000)(await leer(ana.uid, 'movimientos', r.id)));
 
@@ -250,5 +282,5 @@ caso('Colección no permitida → COLECCION_INVALIDA', (await A('DELETE', `/api/
 
 servidor.close();
 
-console.log(`\nprueba-servidor-firebase: ${ok} OK, ${mal} fallas`);
+console.log(`\nprueba-motor-firebase: ${ok} OK, ${mal} fallas`);
 process.exit(mal ? 1 : 0);

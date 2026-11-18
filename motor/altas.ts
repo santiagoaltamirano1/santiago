@@ -4,17 +4,16 @@
 //    El saldo inicial de una cuenta entra después como movimiento de 'ajuste' (lo hace la app).
 //  · Idempotente por id: si la app reintenta con el mismo id, devuelve lo que ya existe.
 //  · Borrar es "borrado suave": is_active = false. Nunca se borra un documento.
-import { randomUUID } from 'node:crypto';
-import { firebase, col } from './firebase';
+import { col, docUsuario, transaccion, nuevoId } from './bd';
 import { falla, r2, esUuid, texto, MONEDAS } from './util';
 
 const TIPOS_CUENTA = ['ahorro', 'bolsillo', 'broker', 'efectivo', 'corriente', 'tarjeta'];
 
 async function crear(uid: string, c: 'cuentas' | 'categorias' | 'metas' | 'deudas', idPedido: unknown, datos: Record<string, unknown>) {
-  const id = typeof idPedido === 'string' && idPedido ? idPedido : randomUUID();
+  const id = typeof idPedido === 'string' && idPedido ? idPedido : nuevoId();
   if (!esUuid(id)) falla('ID_INVALIDO', 'id no válido');
   const ref = col(uid, c).doc(id);
-  return firebase().db.runTransaction(async (tx) => {
+  return transaccion(async (tx) => {
     const previo = await tx.get(ref);
     if (previo.exists) return previo.data();
     const doc = { id, user_id: uid, is_active: true, ...datos };
@@ -85,14 +84,13 @@ export async function borrarSuave(uid: string, coleccion: string, id: string) {
 
 /** Semilla para una persona nueva: 2 cuentas y 5 categorías, solo si no tiene ninguna (= seedDefaultsIfEmpty). */
 export async function sembrarSiVacio(uid: string, correo?: string | null): Promise<boolean> {
-  const { db } = firebase();
-  return db.runTransaction(async (tx) => {
-    const perfil = db.collection('usuarios').doc(uid);
+  return transaccion(async (tx) => {
+    const perfil = docUsuario(uid);
     const [p, cu, ca] = await Promise.all([tx.get(perfil), tx.get(col(uid, 'cuentas').limit(1)), tx.get(col(uid, 'categorias').limit(1))]);
     if (!p.exists) tx.set(perfil, { id: uid, nombre: correo || null, moneda_principal: 'COP', created_at: new Date().toISOString() });
     let creo = false;
     const nuevo = (c: 'cuentas' | 'categorias', datos: Record<string, unknown>) => {
-      const id = randomUUID();
+      const id = nuevoId();
       tx.set(col(uid, c).doc(id), { id, user_id: uid, is_active: true, ...datos });
     };
     if (cu.empty) {
@@ -118,7 +116,7 @@ export async function sembrarSiVacio(uid: string, correo?: string | null): Promi
 /** Registro de cuándo y qué se exportó (nunca el contenido). */
 export async function registrarExportacion(uid: string, b: any) {
   const formato = ['md', 'pdf', 'ia'].includes(b?.formato) ? b.formato : falla('FORMATO_INVALIDO', String(b?.formato));
-  const id = randomUUID();
+  const id = nuevoId();
   await col(uid, 'exportaciones').doc(id).set({
     id, creado_en: new Date().toISOString(), formato, desde: fechaOpcional(b?.desde), hasta: fechaOpcional(b?.hasta),
     secciones: Array.isArray(b?.secciones) ? b.secciones.slice(0, 20).map(String) : [], filas: Math.max(0, Number(b?.filas) || 0),

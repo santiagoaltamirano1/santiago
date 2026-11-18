@@ -1,25 +1,22 @@
 rules_version = '2';
-// Lumi Finance · Reglas de Firestore
-// La app SOLO LEE. Toda escritura pasa por el servidor (server.ts, Admin SDK), que aplica las reglas de dinero.
-// Cada persona lee únicamente lo suyo: usuarios/{su uid}/...
+// Lumi Finance · Reglas de Firestore (versión de PRUEBA, Starter Tier de AI Studio)
+// Cada persona lee y escribe SOLO lo suyo: usuarios/{su uid}/...  Nadie ve ni toca datos ajenos.
+// Las reglas de dinero las aplica la app (motor/dinero.ts) en una transacción.
+// Nota: como la app escribe directo, alguien con conocimientos podría alterar SUS PROPIOS datos. Para producción,
+// el diseño es que solo un servidor escriba (necesita un proyecto con facturación e IAM).
 service cloud.firestore {
   match /databases/{database}/documents {
+    function esDueno(uid) { return request.auth != null && request.auth.uid == uid; }
+
     match /usuarios/{uid} {
-      allow read: if request.auth != null && request.auth.uid == uid;
-      allow write: if false;
+      allow read, write: if esDueno(uid);
       match /{coleccion}/{id} {
-        allow read: if request.auth != null && request.auth.uid == uid;
-        allow write: if false;
+        allow read: if esDueno(uid);
+        // Al crear, el documento debe ser de esa persona (user_id = su uid) cuando el campo existe
+        allow create: if esDueno(uid) && (!('user_id' in request.resource.data) || request.resource.data.user_id == uid);
+        allow update: if esDueno(uid) && (!('user_id' in request.resource.data) || request.resource.data.user_id == uid);
+        allow delete: if false; // nada se borra: is_active = false
       }
-    }
-    // Tasas de cambio: públicas para quien tenga sesión, de solo lectura
-    match /tasas/{id} {
-      allow read: if request.auth != null;
-      allow write: if false;
-    }
-    match /sistema/config {
-      allow read: if request.auth != null;
-      allow write: if false;
     }
     // Todo lo demás: cerrado
     match /{todo=**} {

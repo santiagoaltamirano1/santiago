@@ -1,5 +1,5 @@
 // Iteración 2 · F3 · Trae TODOS los datos para Exportar desde el servidor.
-// No usa el store ni el tiempo real: GET /api/exportar devuelve el resumen y TODAS las filas (server/reportes.ts).
+// No usa el store ni el tiempo real: GET /api/exportar devuelve el resumen y TODAS las filas (motor/reportes.ts).
 import { api } from './api';
 import { DocumentoExport, normalizarDocumento } from '../ia/tipos';
 

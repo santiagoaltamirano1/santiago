@@ -1,26 +1,20 @@
-// Lumi Finance · REGLAS DE DINERO DEL SERVIDOR (la fuente de verdad).
+// Lumi Finance · REGLAS DE DINERO (la fuente de verdad del motor).
 // Traducción fiel de las funciones SQL de Supabase:
 //   wf_commit_transaccion + wf_commit_nucleo + disparador wf_validar_categoria → registrarMovimiento()
 //   wf_ajustar_saldo → ajustarSaldo()     wf_disponible_cop → disponibleCop()
 // ESPEJO en la app: src/utils/reglas.ts (calcularEfecto). Si cambias una regla, cambia LAS DOS.
-// Todo corre dentro de una transacción de Firestore: o se guarda todo, o nada.
-import { randomUUID } from 'node:crypto';
-import type { Transaction, DocumentSnapshot } from 'firebase-admin/firestore';
-import { firebase, col, docConfig } from './firebase';
-import { falla, r2, r4, convertir, tasaDe, hoyBogota, TASAS_POR_DEFECTO, type Tasas, esUuid, texto } from './util';
+// Versión de prueba (Starter Tier): corre en el navegador (motor/bd.ts). Todo va en una transacción de Firestore.
+// ESPEJO para la pantalla: src/utils/reglas.ts (calcularEfecto). Si cambias una regla, cambia LAS DOS.
+import { col, transaccion, nuevoId, type Tx, type Foto } from './bd';
+import { tasasConfig } from './tasas';
+import { falla, r2, r4, convertir, tasaDe, hoyBogota, type Tasas, esUuid, texto } from './util';
+export { tasasConfig };
 
 export const TIPOS_MOVIMIENTO = ['ingreso', 'gasto', 'transferencia', 'aporte_meta', 'retiro_meta', 'prestamo_capital', 'abono_capital'] as const;
 const ORIGENES = ['manual', 'ia_voz', 'recuperada'] as const;
 
-/** Tasas vigentes guardadas en sistema/config (las actualiza tasas.ts). */
-export async function tasasConfig(tx?: Transaction): Promise<Tasas> {
-  const s = tx ? await tx.get(docConfig()) : await docConfig().get();
-  const d = s.data() || {};
-  return { usd: Number(d.usd_cop) || TASAS_POR_DEFECTO.usd, eur: Number(d.eur_cop) || TASAS_POR_DEFECTO.eur };
-}
-
 /** = wf_disponible_cop: lo que hay en cuentas (sin tarjetas), en COP, menos lo apartado en metas activas. */
-export async function disponibleCop(uid: string, t: Tasas, tx?: Transaction): Promise<number> {
+export async function disponibleCop(uid: string, t: Tasas, tx?: Tx): Promise<number> {
   const q1 = col(uid, 'cuentas').where('is_active', '==', true);
   const q2 = col(uid, 'metas').where('is_active', '==', true);
   const [cu, me] = tx ? await Promise.all([tx.get(q1), tx.get(q2)]) : await Promise.all([q1.get(), q2.get()]);
@@ -41,7 +35,7 @@ const vacio = (v: unknown) => (v === undefined || v === null || v === '' ? null 
 
 /** Registra un movimiento. Idempotente por id: si ya existe, devuelve el mismo id sin tocar nada. */
 export async function registrarMovimiento(uid: string, p: PayloadMovimiento): Promise<string> {
-  const id = vacio(p.id) || randomUUID();
+  const id = vacio(p.id) || nuevoId();
   if (!esUuid(id)) falla('ID_INVALIDO', 'el id del movimiento no es válido');
   const monto = r2(Math.abs(Number(p.monto) || 0));
   const tipo = vacio(p.tipo);
@@ -70,16 +64,15 @@ export async function registrarMovimiento(uid: string, p: PayloadMovimiento): Pr
     fecha = f.toISOString();
   }
 
-  const { db } = firebase();
-  return db.runTransaction(async (tx) => {
+  const t = await tasasConfig();
+  return transaccion(async (tx) => {
     // ---------- LECTURAS (Firestore exige leer todo antes de escribir) ----------
     const refMov = col(uid, 'movimientos').doc(id);
     if ((await tx.get(refMov)).exists) return id; // idempotencia
     const refCap = capturaId ? col(uid, 'capturas').doc(capturaId) : null;
     if (refCap && !(await tx.get(refCap)).exists) falla('CAPTURA_AJENA', 'la captura de voz no existe o no es tuya');
-    const t = await tasasConfig(tx);
-    const leer = async (c: 'cuentas' | 'metas' | 'deudas' | 'categorias', docId: string | null) =>
-      (docId ? await tx.get(col(uid, c).doc(docId)) : null) as DocumentSnapshot | null;
+    const leer = async (c: 'cuentas' | 'metas' | 'deudas' | 'categorias', docId: string | null): Promise<Foto | null> =>
+      (docId ? await tx.get(col(uid, c).doc(docId)) : null);
     const sCuenta = await leer('cuentas', cuentaId);
     if (cuentaId && !sCuenta!.exists) falla('CUENTA_AJENA', 'cuenta de origen ajena o inexistente');
     const sDest = tipo === 'transferencia' ? await leer('cuentas', destId) : null;
@@ -190,8 +183,8 @@ export async function registrarMovimiento(uid: string, p: PayloadMovimiento): Pr
 export async function ajustarSaldo(uid: string, id: string, cuentaId: string, objetivo: number, notas?: string | null) {
   if (!id || !cuentaId || objetivo === null || objetivo === undefined || !Number.isFinite(Number(objetivo))) falla('DATOS_INCOMPLETOS', 'faltan datos del ajuste');
   if (!esUuid(id)) falla('ID_INVALIDO', 'el id del ajuste no es válido');
-  const { db } = firebase();
-  return db.runTransaction(async (tx) => {
+  const t = await tasasConfig();
+  return transaccion(async (tx) => {
     const refMov = col(uid, 'movimientos').doc(id);
     const previo = await tx.get(refMov);
     if (previo.exists) {
@@ -201,7 +194,6 @@ export async function ajustarSaldo(uid: string, id: string, cuentaId: string, ob
     const refCuenta = col(uid, 'cuentas').doc(cuentaId);
     const sc = await tx.get(refCuenta);
     if (!sc.exists) falla('CUENTA_AJENA', 'cuenta ajena o inexistente');
-    const t = await tasasConfig(tx);
     const a = sc.data()!;
     const obj = r2(Number(objetivo));
     const anterior = Number(a.saldo_actual || 0);

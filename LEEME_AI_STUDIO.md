@@ -5,8 +5,8 @@ Tu trabajo es **alojarla con Firebase y Gemini sin cambiar cómo funciona**. Tra
 
 ## 5 reglas que no se rompen
 1. **Toda la app habla en español de Colombia**, en tuteo y con frases cortas.
-2. **El dinero solo lo escribe el servidor.** La app LEE Firestore y ESCRIBE llamando a `/api/*` (`server.ts`). No agregues escrituras a Firestore desde el navegador y no cambies `firestore.rules`.
-3. **Las reglas de dinero existen dos veces:** `server/dinero.ts` (la verdad) y `src/utils/reglas.ts` (la copia para la pantalla). Si cambias una, cambias las dos en el mismo paso.
+2. **Versión DEMO para el plan gratuito (Starter Tier):** la app lee y escribe Firestore desde el navegador con el **motor** (`motor/`), protegido por `firestore.rules`, donde cada persona solo ve lo suyo. El servidor (`server.ts`) **no toca Firestore**: solo la voz con Gemini y las tasas. No cambies esto ni las reglas.
+3. **Las reglas de dinero existen dos veces:** `motor/dinero.ts` (la verdad) y `src/utils/reglas.ts` (la copia para la pantalla). Si cambias una, cambias las dos en el mismo paso.
 4. **Ninguna llave va en el código.** Gemini usa el secreto `GEMINI_API_KEY`. Firebase usa `firebase-applet-config.json`.
 5. **No reescribas lo que funciona.** Si algo falla, arregla lo mínimo y di qué cambiaste.
 
@@ -15,11 +15,11 @@ Tu trabajo es **alojarla con Firebase y Gemini sin cambiar cómo funciona**. Tra
 |---|---|
 | Pantallas (React + Vite + Tailwind + Zustand) | `src/` (`components/`, `store/useFinanceStore.ts`) |
 | Conexión de la app con Firebase (Auth con correo y contraseña, lectura de Firestore) | `src/services/firebase.ts` |
-| Llamadas de la app al servidor | `src/services/api.ts`, `financeService.ts`, `currency.ts`, `exportService.ts`, `ia.ts` |
-| Servidor Express (rutas `/api/*`, sirve la app) | `server.ts` |
-| Reglas de dinero, altas, tasas, reportes | `server/dinero.ts`, `server/altas.ts`, `server/tasas.ts`, `server/reportes.ts` |
+| Llamadas `/api/...` (casi todas se resuelven en el navegador con `motor/rutas.ts`) | `src/services/api.ts`, `financeService.ts`, `currency.ts`, `exportService.ts`, `ia.ts` |
+| Servidor Express (voz con Gemini, tasas en vivo; sirve la app) | `server.ts`, `server/` |
+| Motor (corre en el navegador): dinero, altas, reportes, voz (captura) | `motor/dinero.ts`, `motor/altas.ts`, `motor/reportes.ts`, `motor/voz.ts`, `motor/bd.ts` |
 | Voz con Gemini (prompt versionado, set de 30 frases, calificador) | `server/voz/` |
-| Permisos de Firestore (solo lectura de lo propio) | `firestore.rules` |
+| Permisos de Firestore (cada quien lee y escribe solo lo suyo) | `firestore.rules` |
 | Pruebas | `scripts/` (ver `guia-ai-studio/contexto/07_PRUEBAS.md`) |
 
 ## Si necesitas más detalle, lee SOLO el archivo del tema

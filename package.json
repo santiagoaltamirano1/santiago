@@ -8,9 +8,9 @@
     "build": "vite build",
     "start": "NODE_ENV=production tsx server.ts",
     "lint": "tsc --noEmit",
-    "prueba:servidor": "npx -y firebase-tools@15 emulators:exec --only auth,firestore --project demo-lumi \"tsx scripts/prueba-servidor-firebase.ts\"",
     "prueba:local": "tsx scripts/prueba-reglas.ts && tsx scripts/prueba-indicadores.ts && tsx scripts/prueba-exportar.ts && tsx scripts/prueba-paquete.ts && tsx scripts/prueba-voz-local.ts",
-    "prueba:ui": "npx -y firebase-tools@15 emulators:exec --only auth,firestore --project demo-lumi \"node scripts/prueba-ui-firebase.mjs\""
+    "prueba:ui": "npx -y firebase-tools@15 emulators:exec --only auth,firestore --project demo-lumi \"node scripts/prueba-ui-firebase.mjs\"",
+    "prueba:motor": "npx -y firebase-tools@15 emulators:exec --only auth,firestore --project demo-lumi \"tsx scripts/prueba-motor-firebase.ts\""
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

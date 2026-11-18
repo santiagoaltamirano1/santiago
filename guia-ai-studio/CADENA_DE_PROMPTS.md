@@ -27,23 +27,22 @@ Respóndeme con, en máximo 10 líneas y en español:
 ```
 Objetivo: que la app arranque en la vista previa conectada a Firebase.
 Lee solo: guia-ai-studio/contexto/02_ARQUITECTURA.md y server/firebase.ts.
-No toques: server/dinero.ts, server/altas.ts, src/utils/reglas.ts, firestore.rules.
+No toques: motor/, src/utils/reglas.ts, firestore.rules.
 Haz:
 - Confirma que existe firebase-applet-config.json en la raíz, con projectId y, si aplica, firestoreDatabaseId. El servidor y la app ya lo leen.
 - La app arranca con "npm run dev" (server.ts sirve la app con Vite en el puerto 3000). No cambies esa forma de arrancar.
 - Abre /api/salud y muéstrame el JSON completo.
-Comprueba: "firebase.firestore" debe ser "ok" e "ia.llave" debe ser true.
-Si firestore NO es "ok": NO cambies el código para saltarte el permiso. Dime el error exacto. La solución es el secreto FIREBASE_SERVICE_ACCOUNT, que pongo yo.
+Comprueba: "ok" e "ia.llave" deben ser true. Esta es la versión DEMO: la app escribe Firestore con motor/ y el servidor no usa Firestore (no necesita FIREBASE_SERVICE_ACCOUNT).
 Respóndeme con: el JSON de /api/salud y la lista de archivos que cambiaste (lo ideal es ninguno).
 ```
 
 ## Prompt 3 · Reglas de seguridad de Firestore
 ```
-Objetivo: que Firestore use EXACTAMENTE las reglas de firestore.rules.
+Objetivo: que Firestore use EXACTAMENTE las reglas de firestore.rules (cada persona lee y escribe solo usuarios/{su uid}).
 Lee solo: firestore.rules y guia-ai-studio/contexto/04_DATOS_FIRESTORE.md.
-No toques: el contenido de firestore.rules. No generes reglas nuevas y no abras permisos de escritura.
+No toques: el contenido de firestore.rules. No generes reglas nuevas.
 Haz: publica firestore.rules en el proyecto de Firebase. Si no puedes publicarlas tú, dime "Publícalas a mano" y yo las pego en la consola.
-Comprueba: con una sesión iniciada, la app lee sus cuentas; ninguna escritura directa desde el navegador está permitida.
+Comprueba: con sesión, la app lee y guarda sus datos; no puede leer ni escribir los de otra persona.
 Respóndeme con: "Reglas publicadas" o "Publícalas a mano", y confirma que no cambiaste el archivo.
 ```
 
@@ -62,7 +61,7 @@ Respóndeme con: qué viste y si hubo algún error, con el texto exacto.
 ```
 Objetivo: verificar que las reglas de dinero funcionan igual que antes.
 Lee solo: guia-ai-studio/contexto/03_REGLAS_DE_DINERO.md y guia-ai-studio/contexto/07_PRUEBAS.md.
-No toques: server/dinero.ts y src/utils/reglas.ts, salvo que encuentres un error real. En ese caso explícamelo ANTES de cambiarlo.
+No toques: motor/dinero.ts y src/utils/reglas.ts, salvo que encuentres un error real. En ese caso explícamelo ANTES de cambiarlo.
 Haz:
 - Si puedes correr comandos: "npm run lint" y "npm run prueba:local".
 - Recorre la "Lista manual" de 07_PRUEBAS.md, pasos 1 a 8, en la vista previa.
@@ -99,9 +98,9 @@ Respóndeme con: la URL publicada, el JSON de /api/salud y si el gasto quedó gu
 Antes de cambiar algo en Lumi Finance:
 - Lee LEEME_AI_STUDIO.md y SOLO el archivo de guia-ai-studio/contexto/ que tenga que ver con el pedido.
 - Ubica el cambio en su módulo y subsección (Calculadora, Anotar, Metas y Deudas, Analítica).
-- Si toca reglas de dinero: cambia server/dinero.ts y src/utils/reglas.ts juntos, y corre "npm run prueba:local".
+- Si toca reglas de dinero: cambia motor/dinero.ts y src/utils/reglas.ts juntos, y corre "npm run prueba:local".
 - Si toca el prompt de voz: crea una versión nueva en server/voz/prompt.ts y mídela con "Medir la voz" antes de usarla.
-- No escribas en Firestore desde el navegador, no cambies firestore.rules y no pongas llaves en el código.
+- No cambies firestore.rules ni el reparto motor/ (navegador) – server/ (Gemini y tasas), y no pongas llaves en el código.
 - Haz el cambio mínimo y dime: qué archivos cambiaste, por qué y cómo lo probaste.
 Mi pedido: <escribe aquí lo que quieres>
 ```

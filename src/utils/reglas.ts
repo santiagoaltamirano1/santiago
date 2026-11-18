@@ -1,5 +1,5 @@
 // Reglas de dinero del lado de la app (Fase 3).
-// ESPEJO de las reglas del servidor: server/dinero.ts (registrarMovimiento). Si cambias una regla, cambia LAS DOS.
+// ESPEJO de las reglas del servidor: motor/dinero.ts (registrarMovimiento). Si cambias una regla, cambia LAS DOS.
 // Si cambias una regla aquí, cámbiala allá en el mismo cambio, y viceversa.
 // Se usa para: validar ANTES de guardar (mismos códigos que el servidor), aplicar el efecto optimista
 // y DESHACER aplicando el efecto inverso (no una foto: corrige E10).
@@ -32,7 +32,7 @@ export interface Efecto {
 
 const r2 = (n: number) => Math.round(n * 100) / 100;
 
-/** Disponible (D-029): cuentas que no son tarjeta, en COP, menos lo apartado en metas. Igual que disponibleCop() de server/dinero.ts. */
+/** Disponible (D-029): cuentas que no son tarjeta, en COP, menos lo apartado en metas. Igual que disponibleCop() de motor/dinero.ts. */
 export function disponibleCOP(cuentas: Cuenta[], metas: Meta[], fx: FxRates): number {
   const enCuentas = cuentas
     .filter((c) => c.is_active !== false && c.tipo !== 'tarjeta')
@@ -97,7 +97,7 @@ export function calcularEfecto(tx: Omit<Transaccion, 'id' | 'user_id'>, s: Estad
   if ((tx.tipo === 'aporte_meta' || tx.tipo === 'retiro_meta') && !tx.meta_id) return err('META_REQUERIDA');
   if ((tx.tipo === 'prestamo_capital' || tx.tipo === 'abono_capital') && !tx.deuda_id) return err('DEUDA_REQUERIDA');
   if (tx.tipo === 'ajuste') return err('TIPO_INVALIDO');
-  // Igual que la validación de categoría de server/dinero.ts: gasto/ingreso exigen categoría de su mismo tipo.
+  // Igual que la validación de categoría de motor/dinero.ts: gasto/ingreso exigen categoría de su mismo tipo.
   if ((tx.tipo === 'ingreso' || tx.tipo === 'gasto') && s.categorias) {
     if (!tx.categoria_id) return err('CATEGORIA_REQUERIDA');
     const cat = s.categorias.find((c) => c.id === tx.categoria_id);

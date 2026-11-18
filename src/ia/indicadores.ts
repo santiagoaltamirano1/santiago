@@ -1,6 +1,6 @@
 // Iteración 2 · F3 · Indicadores precalculados para el agente analista (diseño: docs/fases/MESA_AGENTE_ANALISTA_v1.md §2.2).
 // Funciones PURAS: reciben el DocumentoExport y devuelven cifras con ID. La IA nunca calcula: solo cita estos IDs.
-// Convenciones: COP = columna `cop` de cada fila (regla de /api/resumen (server/reportes.ts)). Gasto e ingreso = solo tipos 'gasto' e 'ingreso'.
+// Convenciones: COP = columna `cop` de cada fila (regla de /api/resumen (motor/reportes.ts)). Gasto e ingreso = solo tipos 'gasto' e 'ingreso'.
 // Factor mensual 30,4 · anual 365 · proyecciones redondeadas al $1.000.
 import type { DocumentoExport, FilaMovimiento } from './tipos';
 import { REFERENCIAS, Referencia, claseCategoria, ClaseCategoria, referenciasVigentes, valorRef } from './referencias';
@@ -356,7 +356,7 @@ function armarGraficos(doc: DocumentoExport, ind: Omit<Indicadores, 'graficos'>,
     etiquetas: Array.from({ length: 13 }, (_, h) => (h === 0 ? 'Hoy' : `${h} m`)),
     series: ind.I19.escenarios.map((e) => ({ nombre: e.nombre, color: color[e.id], valores: e.serie })) });
 
-  // G5 patrimonio al cierre de cada mes: patrimonio de hoy − flujos posteriores (misma fórmula de /api/resumen (server/reportes.ts))
+  // G5 patrimonio al cierre de cada mes: patrimonio de hoy − flujos posteriores (misma fórmula de /api/resumen (motor/reportes.ts))
   const flujo = (f: FilaMovimiento) => (f.tipo === 'ingreso' ? f.cop : f.tipo === 'gasto' ? -f.cop : f.tipo === 'ajuste' ? f.cop : 0);
   const meses6 = Array.from({ length: 6 }, (_, i) => sumarMeses(mesDe(ind.corte), i - 5)).filter((m) => m >= mesDe(R.desde));
   if (meses6.length) g.push({ id: 'G5', titulo: 'Tu patrimonio en los últimos meses', tipo: 'line', horizontal: false, etiquetas: meses6.map(etiquetaMes),

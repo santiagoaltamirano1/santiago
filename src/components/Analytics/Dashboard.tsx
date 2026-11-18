@@ -10,7 +10,7 @@ import type { Transaccion } from '../../types';
 // Dashboard (Fase 6). Orden por prioridad para la persona (mesa UX, Fase 1):
 // 1 Disponible · 2 Mes: ingresos y gastos · 3 Deudas · 4 Metas · 5 ¿En qué se fue? · 6 Tendencia · 7 Patrimonio
 // · 8 Cuentas · 9 Últimos movimientos · pie: tasa usada.
-// Fórmulas en el mapa §7.2. Lo "del mes" viene del servidor (/api/resumen (server/reportes.ts), todos los movimientos) + lo que aún está
+// Fórmulas en el mapa §7.2. Lo "del mes" viene del servidor (/api/resumen (motor/reportes.ts), todos los movimientos) + lo que aún está
 // en sus 5 s para deshacer; lo "de ahora" (disponible, deudas, metas, cuentas) viene del estado en vivo.
 
 const NOMBRE_MES = (iso: string, largo = false) => {

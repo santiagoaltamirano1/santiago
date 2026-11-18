@@ -712,7 +712,7 @@ export const useFinanceStore = create<FinanceStore>((set, get) => ({
     setTimeout(() => get().cerrarAviso(avisoId), 2000);
   },
 
-  /** Envía el movimiento al servidor (/api/movimientos (server/dinero.ts)). Una sola vez por id (N2). */
+  /** Envía el movimiento al servidor (/api/movimientos (motor/dinero.ts)). Una sola vez por id (N2). */
   commitPendingTransaccion: (pendingId) => {
     const yaVa = enVuelo.get(pendingId);
     if (yaVa) return yaVa;

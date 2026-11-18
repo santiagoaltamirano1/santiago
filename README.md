@@ -17,6 +17,6 @@ Finanzas personales para jóvenes en Colombia: anota gastos e ingresos en segund
 ```bash
 npm run lint
 npm run prueba:local       # sin internet
-npm run prueba:servidor    # emuladores de Firebase (firebase-tools + Java)
+npm run prueba:motor       # emuladores de Firebase (firebase-tools + Java)
 npm run prueba:ui          # navegador real + emuladores (Playwright)
 ```

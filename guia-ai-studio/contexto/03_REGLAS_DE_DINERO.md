@@ -1,6 +1,6 @@
 # 03 · Reglas de dinero (NO se cambian sin la dueña)
 
-Viven en **`server/dinero.ts`** (la verdad) y en la copia **`src/utils/reglas.ts`** (valida antes de enviar, aplica el efecto optimista y deshace). **Cambiar una obliga a cambiar la otra** y a correr las pruebas (07).
+Viven en **`motor/dinero.ts`** (la verdad) y en la copia **`src/utils/reglas.ts`** (valida antes de enviar, aplica el efecto optimista y deshace). **Cambiar una obliga a cambiar la otra** y a correr las pruebas (07).
 
 ## Tipos de movimiento y su efecto
 | Tipo | Cuenta de origen | Otra cosa que cambia | ¿Cuenta como ingreso o gasto? |

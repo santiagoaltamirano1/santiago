@@ -1,4 +1,5 @@
 import { api } from './api';
+import { usarTasas } from '../../motor/tasas';
 import type { FxRates } from '../utils/fx';
 export type { FxRates } from '../utils/fx';
 
@@ -49,3 +50,13 @@ export async function fetchFx(): Promise<FxRates> {
 
 // toCOP y convertir viven en utils/fx.ts (sin dependencias, igual que convertir() de server/util.ts).
 export { toCOP, convertir } from '../utils/fx';
+
+// El motor (motor/dinero.ts) convierte con la última tasa guardada en este navegador.
+usarTasas(() => {
+  const fx = cachedFx();
+  const vigentes = [
+    { moneda: 'USD' as const, cop_por_unidad: fx.usdCop, vigente_desde: fx.usdDesde ?? null, vigente_hasta: fx.usdHasta ?? null, fuente: String(fx.fuente || '').split(' · ')[0] || 'valor por defecto', consultado_en: fx.updatedAt ? new Date(fx.updatedAt).toISOString() : null, proxima: false },
+    { moneda: 'EUR' as const, cop_por_unidad: fx.eurCop, vigente_desde: fx.eurDesde ?? null, vigente_hasta: null, fuente: /EUR: (.+)$/.exec(String(fx.fuente || ''))?.[1] || 'valor por defecto', consultado_en: null, proxima: false },
+  ];
+  return { tasas: { usd: fx.usdCop, eur: fx.eurCop }, vigentes };
+});

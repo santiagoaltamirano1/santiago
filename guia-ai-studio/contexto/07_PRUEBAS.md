@@ -4,7 +4,7 @@
 |---|---|---|
 | `npm run lint` | Revisión de tipos de todo el proyecto | — |
 | `npm run prueba:local` | Reglas de dinero (16), indicadores (61), exportar (30), paquete de la IA (64) y voz sin IA (31) | — |
-| `npm run prueba:servidor` | Servidor de punta a punta (81): dinero, dólares, metas, deudas, repetidos, datos ajenos, permisos de Firestore, tasas, resumen, exportar y voz con un Gemini simulado | Emuladores de Firebase (`firebase-tools` y Java) |
+| `npm run prueba:motor` | Motor + servidor de punta a punta (83): dinero, dólares, metas, deudas, repetidos, datos ajenos, permisos de Firestore, tasas, resumen, exportar y voz con un Gemini simulado | Emuladores de Firebase (`firebase-tools` y Java) |
 | `npm run prueba:ui` | En el navegador (9): crear cuenta, ingreso y gasto, saldos, recarga, tiempo real, voz sin IA y exportar | Emuladores y Playwright |
 
 Las dos últimas se corren en un computador con Node. Si AI Studio no puede correrlas, usa la **lista manual**.

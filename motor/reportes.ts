@@ -1,8 +1,9 @@
 // Lumi Finance · Resumen del tablero y exportación (antes: wf_resumen, wf_exportar, wf_exportar_movimientos).
-// Se calcula sobre TODOS los movimientos de la persona, en el servidor, con la tasa guardada en cada movimiento.
-import { col } from './firebase';
+// Se calcula sobre TODOS los movimientos de la persona (en el navegador, versión de prueba), con la tasa guardada en cada movimiento.
+import { col } from './bd';
 import { tasasConfig, disponibleCop } from './dinero';
 import { tasasVigentes } from './tasas';
+
 import {
   redondear as rd, convertir, copMovimiento, diaMovimiento, horaBogota, hoyBogota, mesDe, sumarMeses, ultimoDiaMes, sinIds, type Tasas,
 } from './util';

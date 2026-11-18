@@ -55,7 +55,7 @@ try {
   await page.locator('button', { hasText: 'Salario' }).first().click().catch(() => {});
   await page.locator('button[type=submit]').last().click();
   await page.waitForTimeout(7000); // 5 s para deshacer + envío
-  caso('Ingreso 100.000 guardado por el servidor (Efectivo 100.000)', (await cuentas()).Efectivo === 100000, await cuentas());
+  caso('Ingreso 100.000 guardado en Firestore (Efectivo 100.000)', (await cuentas()).Efectivo === 100000, await cuentas());
 
   // Gasto 25.000 (0 − 25000 =)
   await page.locator('nav').getByText('Calculadora').click();
@@ -111,7 +111,7 @@ try {
   await botonGenerar.click();
   await page.waitForTimeout(3000);
   const textoExport = await page.locator('main').textContent();
-  caso('Exportar: lee el documento del servidor (2 movimientos)', !/No se pudo leer/.test(textoExport) && /2 movimientos|movimientos: 2|Listo/i.test(textoExport), textoExport.slice(0, 300));
+  caso('Exportar: arma el documento (2 movimientos)', !/No se pudo leer/.test(textoExport) && /2 movimientos|movimientos: 2|Listo/i.test(textoExport), textoExport.slice(0, 300));
   await page.screenshot({ path: `${OUT}/7-exportar-listo.png` });
 } catch (e) {
   caso('La prueba terminó sin excepción', false, String(e?.message || e).slice(0, 400));
