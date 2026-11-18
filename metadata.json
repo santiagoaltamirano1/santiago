@@ -1,0 +1,6 @@
+{
+  "name": "Lumi Finance",
+  "description": "Finanzas personales para jóvenes en Colombia: anota gastos e ingresos en segundos (calculadora o voz), metas, deudas y un informe con tu IA.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

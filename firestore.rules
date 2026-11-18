@@ -1,0 +1,29 @@
+rules_version = '2';
+// Lumi Finance · Reglas de Firestore
+// La app SOLO LEE. Toda escritura pasa por el servidor (server.ts, Admin SDK), que aplica las reglas de dinero.
+// Cada persona lee únicamente lo suyo: usuarios/{su uid}/...
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /usuarios/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow write: if false;
+      match /{coleccion}/{id} {
+        allow read: if request.auth != null && request.auth.uid == uid;
+        allow write: if false;
+      }
+    }
+    // Tasas de cambio: públicas para quien tenga sesión, de solo lectura
+    match /tasas/{id} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+    match /sistema/config {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+    // Todo lo demás: cerrado
+    match /{todo=**} {
+      allow read, write: if false;
+    }
+  }
+}

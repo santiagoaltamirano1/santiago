@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tu informe Lumi</title>
+<style>
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#f6f7f9;color:#111;margin:0;padding:16px}
+main{max-width:860px;margin:auto}section{background:#fff;border:1px solid #e3e6ea;border-radius:12px;padding:16px;margin:12px 0}
+h1{font-size:22px}h2{font-size:17px;margin:0 0 8px}.chart{position:relative;height:300px}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;font-variant-numeric:tabular-nums}
+th,td{padding:4px 6px;border-bottom:1px solid #eee;text-align:right}th:first-child,td:first-child{text-align:left}
+.nota{font-size:12px;color:#555}
+</style></head><body><main>
+<h1>Tu informe Lumi</h1><p class="nota" id="corte"></p><ul id="claves"></ul><div id="graficos"></div>
+<p class="nota">Informe educativo generado por una IA con tus datos de Lumi. No es asesoría financiera regulada.</p>
+</main>
+<script>
+const DATOS = {"pegar":"aquí va el JSON de graficos_json"};
+const CLAVES = ["viñeta 1","viñeta 2","viñeta 3"];
+const COLORES = {ingreso:"#0f766e",gasto:"#b42318",neutro:"#475467",plan:"#1d4ed8",tendencia:"#a15c07"};
+const cop = v => v == null ? "—" : new Intl.NumberFormat("es-CO",{style:"currency",currency:"COP",maximumFractionDigits:0}).format(v);
+document.getElementById("corte").textContent = "Datos con corte al " + DATOS.corte;
+CLAVES.forEach(t => { const li = document.createElement("li"); li.textContent = t; document.getElementById("claves").appendChild(li); });
+function dibujar() {
+  DATOS.graficos.forEach(g => {
+    const s = document.createElement("section");
+    s.innerHTML = "<h2></h2><div class='chart'><canvas role='img'></canvas></div><table><thead><tr><th></th></tr></thead><tbody></tbody></table>";
+    s.querySelector("h2").textContent = g.id + " · " + g.titulo;
+    s.querySelector("canvas").setAttribute("aria-label", g.titulo);
+    const hr = s.querySelector("thead tr");
+    g.series.forEach(se => { const th = document.createElement("th"); th.textContent = se.nombre; hr.appendChild(th); });
+    g.etiquetas.forEach((e, i) => {
+      const tr = document.createElement("tr"); const td0 = document.createElement("td"); td0.textContent = e; tr.appendChild(td0);
+      g.series.forEach(se => { const td = document.createElement("td"); td.textContent = cop(se.valores[i]); tr.appendChild(td); });
+      s.querySelector("tbody").appendChild(tr);
+    });
+    document.getElementById("graficos").appendChild(s);
+    if (!window.Chart) { s.querySelector(".chart").remove(); return; }
+    new Chart(s.querySelector("canvas"), {
+      type: g.tipo,
+      data: { labels: g.etiquetas, datasets: g.series.map(se => ({ label: se.nombre, data: se.valores, backgroundColor: COLORES[se.color], borderColor: COLORES[se.color], borderWidth: g.tipo === "line" ? 2 : 0, borderDash: se.color === "tendencia" ? [6,4] : [], pointRadius: 2 })) },
+      options: { maintainAspectRatio: false, indexAxis: g.horizontal ? "y" : "x",
+        plugins: { tooltip: { callbacks: { label: c => c.dataset.label + ": " + cop(c.raw) } } },
+        scales: { [g.horizontal ? "x" : "y"]: { ticks: { callback: v => cop(v) } } } }
+    });
+  });
+}
+const cdn = ["https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js","https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"];
+(function cargar(i) {
+  if (i >= cdn.length) { dibujar(); return; }
+  const sc = document.createElement("script"); sc.src = cdn[i];
+  sc.onload = dibujar; sc.onerror = () => cargar(i + 1); document.head.appendChild(sc);
+})(0);
+</script></body></html>

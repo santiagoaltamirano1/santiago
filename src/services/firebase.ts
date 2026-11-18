@@ -1,0 +1,21 @@
+// Lumi Finance · Conexión de la APP con Firebase (Auth con correo y contraseña + lectura de Firestore).
+// La configuración la crea AI Studio al activar Firebase: firebase-applet-config.json (en la raíz).
+// La app NUNCA escribe en Firestore: lee aquí y escribe a través del servidor (/api/*, ver services/api.ts).
+import { initializeApp, type FirebaseApp } from 'firebase/app';
+import { getAuth, connectAuthEmulator, type Auth } from 'firebase/auth';
+import { getFirestore, connectFirestoreEmulator, type Firestore } from 'firebase/firestore';
+
+// Si el archivo aún no existe (Firebase sin activar), la app muestra un aviso en vez de romperse.
+const archivos = import.meta.glob('../../firebase-applet-config.json', { eager: true, import: 'default' });
+const config = Object.values(archivos)[0] as Record<string, string> | undefined;
+const emuladores = import.meta.env.VITE_USAR_EMULADORES === '1'; // solo para pruebas locales (npm run prueba:ui)
+export const firebaseConfigurado = emuladores || (!!config?.projectId && !String(config.projectId).startsWith('PON-AQUI'));
+const app: FirebaseApp = initializeApp(config?.projectId && !emuladores ? config : { projectId: 'demo-lumi', apiKey: 'demo', authDomain: 'demo' });
+export const auth: Auth = getAuth(app);
+const base = config?.firestoreDatabaseId;
+export const db: Firestore = base && base !== '(default)' ? getFirestore(app, base) : getFirestore(app);
+
+if (emuladores) {
+  connectAuthEmulator(auth, 'http://127.0.0.1:9099', { disableWarnings: true });
+  connectFirestoreEmulator(db, '127.0.0.1', 8080);
+}

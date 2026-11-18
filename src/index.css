@@ -1,0 +1,408 @@
+@import "tailwindcss";
+
+/* 
+ * COLOR PALETTES ARCHITECTURE:
+ * 1. Clinical Blueprint (Frosted Paper Monochrome)
+ * 2. Twitch Violet (refero.design twitch.tv.jpg)
+ * 3. Mercury Dark (refero.design 71f6856a-def5-4a46-b0e0-88174dbbeb0e.jpg)
+ * 4. Netflix Crimson (refero.design netflix.com.jpg)
+ */
+
+:root,
+[data-theme="blueprint"] {
+  --canvas: #f5f5f5;
+  --paper: #ffffff;
+  --surface-alt: #fafafa;
+  --ink: #0a0a0a;
+  /* Fase 6 · colores de gráficos (validados con dataviz: CVD, croma, contraste) */
+  --chart-income: #0a8f80;
+  --chart-expense: #d03a2a;
+  --ink-soft: #171717;
+  --mid-gray: #666666;
+  --hairline: #e5e5e5;
+  --primary: #0a0a0a;
+  --primary-text: #fafafa;
+  --primary-hover: #262626;
+  --primary-light: rgba(10, 10, 10, 0.06);
+  --ember: #c8000a;
+  --badge-bg: #f5f5f5;
+  --code-bg: #fafafa;
+  --shadow-subtle: 0 0 0 1px rgba(23, 23, 23, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  /* Semánticos (iteración de diseño 2026-11-17) */
+  --income: #0e6b63;
+  --expense: #b42318;
+  --transfer: #475569;
+  --alert: #92400e;
+  --field-border: #8a8a8a;
+  color-scheme: light;
+}
+
+[data-theme="twitch"] {
+  --canvas: #f4f0fb;
+  --paper: #ffffff;
+  --surface-alt: #ede6f9;
+  --ink: #0e0720;
+  /* Fase 6 · colores de gráficos (validados con dataviz: CVD, croma, contraste) */
+  --chart-income: #0a8f80;
+  --chart-expense: #d03a2a;
+  --ink-soft: #18181b;
+  --mid-gray: #665a87;
+  --hairline: #e2d8f7;
+  --primary: #9146FF;
+  --primary-text: #ffffff;
+  --primary-hover: #772ce8;
+  --primary-light: rgba(145, 70, 255, 0.12);
+  --ember: #c8000a;
+  --badge-bg: #efeaf8;
+  --code-bg: #f8f6fd;
+  --shadow-subtle: 0 0 0 1px rgba(145, 70, 255, 0.08), 0 1px 4px rgba(145, 70, 255, 0.08);
+  /* Semánticos (iteración de diseño 2026-11-17) */
+  --income: #0e6b63;
+  --expense: #b42318;
+  --transfer: #475569;
+  --alert: #92400e;
+  --field-border: #857aa8;
+  color-scheme: light;
+}
+
+[data-theme="mercury"] {
+  --canvas: #0b0e14;
+  --paper: #141822;
+  --surface-alt: #1d2331;
+  --ink: #f1f5f9;
+  /* Fase 6 · colores de gráficos (validados con dataviz: CVD, croma, contraste) */
+  --chart-income: #1a9e96;
+  --chart-expense: #e0533f;
+  --ink-soft: #e2e8f0;
+  --mid-gray: #8997ac;
+  --hairline: #232a3b;
+  --primary: #2563eb;
+  --primary-text: #ffffff;
+  --primary-hover: #1d4ed8;
+  --primary-light: rgba(59, 130, 246, 0.16);
+  --ember: #f87171;
+  --badge-bg: #1c2230;
+  --code-bg: #0e121a;
+  --shadow-subtle: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 2px 8px rgba(0, 0, 0, 0.5);
+  /* Semánticos (iteración de diseño 2026-11-17) */
+  --income: #34d399;
+  --expense: #f87171;
+  --transfer: #93a4bd;
+  --alert: #fbbf24;
+  --field-border: #6b7790;
+  color-scheme: dark;
+}
+
+[data-theme="netflix"] {
+  --canvas: #080808;
+  --paper: #141414;
+  --surface-alt: #202020;
+  --ink: #ffffff;
+  /* Fase 6 · colores de gráficos (validados con dataviz: CVD, croma, contraste) */
+  --chart-income: #1a9e96;
+  --chart-expense: #e0533f;
+  --ink-soft: #e5e5e5;
+  --mid-gray: #949494;
+  --hairline: #2b2b2b;
+  --primary: #E50914;
+  --primary-text: #ffffff;
+  --primary-hover: #b80710;
+  --primary-light: rgba(229, 9, 20, 0.16);
+  --ember: #ff3b3b;
+  --badge-bg: #222222;
+  --code-bg: #0e0e0e;
+  --shadow-subtle: 0 0 0 1px rgba(255, 255, 255, 0.07), 0 2px 8px rgba(0, 0, 0, 0.7);
+  /* Semánticos (iteración de diseño 2026-11-17) */
+  --income: #34d399;
+  --expense: #f87171;
+  --transfer: #93a4bd;
+  --alert: #fbbf24;
+  --field-border: #757575;
+  color-scheme: dark;
+}
+
+@theme {
+  /* Typography */
+  --font-geist: 'Geist', 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 12px;
+  --leading-caption: 1.33;
+  --tracking-caption: 0.6px;
+  --text-body: 14px;
+  --leading-body: 1.43;
+  --text-body-lg: 16px;
+  --leading-body-lg: 1.5;
+  --text-subheading: 18px;
+  --leading-subheading: 1.56;
+  --text-heading-sm: 24px;
+  --leading-heading-sm: 1.33;
+  --tracking-heading-sm: -0.6px;
+  --text-heading: 30px;
+  --leading-heading: 1.2;
+  --tracking-heading: -0.75px;
+  --text-heading-lg: 36px;
+  --leading-heading-lg: 1.11;
+  --tracking-heading-lg: -0.9px;
+  --text-display: 48px;
+  --leading-display: 1.1;
+  --tracking-display: -2.4px;
+
+  /* Border Radius */
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
+  --radius-2xl: 18px;
+  --radius-3xl: 24px;
+}
+
+/* Global Body Theme Binding */
+body {
+  font-family: var(--font-geist);
+  background-color: var(--canvas);
+  color: var(--ink);
+  transition: background-color 200ms ease, color 200ms ease;
+  min-height: 100vh;
+}
+
+/* 
+ * DYNAMIC COLOR PALETTE ADAPTER
+ * Allows all app components to dynamically reflect the selected color palette
+ * without modifying their internal business or layout logic.
+ */
+[data-theme] {
+  background-color: var(--canvas);
+  color: var(--ink);
+}
+
+[data-theme] .bg-\[\#f5f5f5\],
+[data-theme] .bg-\[\#f5f5f7\] {
+  background-color: var(--canvas) !important;
+}
+
+[data-theme] .bg-white {
+  background-color: var(--paper) !important;
+}
+
+[data-theme] .bg-\[\#fafafa\] {
+  background-color: var(--surface-alt) !important;
+}
+
+[data-theme] .bg-\[\#0a0a0a\] {
+  background-color: var(--primary) !important;
+  color: var(--primary-text) !important;
+}
+
+[data-theme] .bg-\[\#171717\] {
+  background-color: var(--primary-hover) !important;
+  color: var(--primary-text) !important;
+}
+
+[data-theme] .text-\[\#0a0a0a\] {
+  color: var(--ink) !important;
+}
+
+[data-theme] .text-\[\#fafafa\],
+[data-theme] .text-white {
+  color: var(--primary-text) !important;
+}
+
+[data-theme] .text-\[\#737373\],
+[data-theme] .text-\[\#a3a3a3\] {
+  color: var(--mid-gray) !important;
+}
+
+[data-theme] .border-\[\#e5e5e5\],
+[data-theme] .border-\[\#f5f5f5\] {
+  border-color: var(--hairline) !important;
+}
+
+[data-theme] .border-\[\#0a0a0a\] {
+  border-color: var(--primary) !important;
+}
+
+[data-theme] .hover\:bg-\[\#f5f5f5\]:hover,
+[data-theme] .hover\:bg-\[\#fafafa\]:hover {
+  background-color: var(--surface-alt) !important;
+}
+
+[data-theme] .hover\:bg-\[\#e5e5e5\]:hover {
+  background-color: var(--hairline) !important;
+}
+
+[data-theme] .hover\:text-\[\#0a0a0a\]:hover {
+  color: var(--ink) !important;
+}
+
+/* Iteración de diseño 2026-11-17: bordes de campo con contraste 3:1 (WCAG 1.4.11) */
+[data-theme] input.border-\[\#e5e5e5\],
+[data-theme] select.border-\[\#e5e5e5\],
+[data-theme] textarea.border-\[\#e5e5e5\],
+[data-theme] .input-blueprint {
+  border-color: var(--field-border) !important;
+}
+
+/* Foco visible para teclado (WCAG 2.4.7) */
+:focus-visible {
+  outline: 2px solid var(--ink) !important;
+  outline-offset: 2px;
+}
+/* El monto grande muestra el foco en todo su bloque, no solo en la caja del texto */
+#monto:focus-visible { outline: none !important; }
+.monto-wrap:focus-within { outline: 2px solid var(--ink); outline-offset: 6px; border-radius: 12px; }
+
+/* Colores con significado: siempre acompañados de signo y texto (WCAG 1.4.1) */
+.text-income { color: var(--income) !important; }
+.text-expense { color: var(--expense) !important; }
+.text-transfer { color: var(--transfer) !important; }
+.text-alert { color: var(--alert) !important; }
+.text-ember { color: var(--ember) !important; }
+.border-income { border-color: var(--income) !important; }
+.border-expense { border-color: var(--expense) !important; }
+.border-transfer { border-color: var(--transfer) !important; }
+.border-ember { border-color: var(--ember) !important; }
+.border-field { border-color: var(--field-border) !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 0ms !important; animation-duration: 0ms !important; }
+}
+
+[data-theme] input,
+[data-theme] select,
+[data-theme] textarea {
+  color: var(--ink);
+}
+
+[data-theme] select option {
+  background-color: var(--paper);
+  color: var(--ink);
+}
+
+@layer utilities {
+  /* Hide scrollbar */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .blueprint-card {
+    background-color: var(--paper);
+    border-radius: 24px;
+    border: 1px solid var(--hairline);
+    box-shadow: var(--shadow-subtle);
+    transition: background-color 200ms ease, border-color 200ms ease;
+  }
+
+  .btn-primary {
+    background-color: var(--primary);
+    color: var(--primary-text);
+    border-radius: 18px;
+    font-weight: 500;
+    transition: opacity 150ms cubic-bezier(0.16, 1, 0.3, 1), transform 150ms ease;
+  }
+  .btn-primary:hover {
+    opacity: 0.92;
+  }
+  .btn-primary:active {
+    transform: scale(0.98);
+  }
+
+  .btn-secondary {
+    background-color: var(--surface-alt);
+    color: var(--ink);
+    border-radius: 18px;
+    font-weight: 500;
+    transition: background-color 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .btn-secondary:hover {
+    background-color: var(--hairline);
+  }
+  .btn-secondary:active {
+    transform: scale(0.98);
+  }
+
+  .btn-outline {
+    background-color: transparent;
+    color: var(--ink);
+    border: 1px solid var(--hairline);
+    border-radius: 18px;
+    font-weight: 500;
+    transition: background-color 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .btn-outline:hover {
+    background-color: var(--surface-alt);
+  }
+
+  .input-blueprint {
+    background-color: var(--surface-alt);
+    color: var(--ink);
+    border-radius: 18px;
+    border: 1px solid var(--hairline);
+    transition: border-color 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .input-blueprint:focus {
+    border-color: var(--primary);
+    outline: none;
+    background-color: var(--paper);
+  }
+}
+
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Fase 5 · Captura por voz: hoja que sube, ondas mientras escucha, carga. */
+@keyframes lumi-subir { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes lumi-aparecer { from { opacity: 0; } to { opacity: 1; } }
+@keyframes lumi-onda { from { transform: scale(1); opacity: .55; } to { transform: scale(1.7); opacity: 0; } }
+@keyframes lumi-girar { to { transform: rotate(360deg); } }
+.lumi-subir { animation: lumi-subir 220ms cubic-bezier(.2,.8,.2,1) both; }
+.lumi-aparecer { animation: lumi-aparecer 180ms ease-out both; }
+.lumi-onda { animation: lumi-onda 1.6s ease-out infinite; }
+.lumi-onda-2 { animation-delay: .8s; }
+.lumi-girar { animation: lumi-girar .8s linear infinite; }
+.mic-calc-escuchando { box-shadow: 0 0 0 3px color-mix(in srgb, var(--ink, #0a0a0a) 15%, transparent); }
+@media (prefers-reduced-motion: reduce) {
+  /* Sin movimiento: las ondas quedan como un anillo fijo y la carga como un punto */
+  .lumi-onda { animation: none !important; opacity: .35; transform: scale(1.25); }
+  .lumi-onda-2 { display: none; }
+  .lumi-girar { animation: none !important; }
+}
+
+/* Iteración 2 · F5 · Exportar en PDF (window.print): solo se imprime el documento, en blanco y negro, tamaño carta */
+.lumi-imprimible { display: none; }
+@media print {
+  @page { size: letter; margin: 14mm 12mm; }
+  html, body { background: #fff !important; }
+  body * { visibility: hidden !important; }
+  .lumi-imprimible, .lumi-imprimible * { visibility: visible !important; }
+  .lumi-imprimible { display: block !important; position: absolute; inset: 0 auto auto 0; width: 100%; color: #000; font: 10pt/1.35 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .lumi-imprimible h1 { font-size: 16pt; margin: 0 0 6pt; }
+  .lumi-imprimible h2 { font-size: 12.5pt; margin: 12pt 0 4pt; break-after: avoid; }
+  .lumi-imprimible h3, .lumi-imprimible h4 { font-size: 11pt; margin: 8pt 0 3pt; break-after: avoid; }
+  .lumi-imprimible p { margin: 3pt 0; }
+  .lumi-imprimible table { width: 100%; border-collapse: collapse; margin: 4pt 0 8pt; font-variant-numeric: tabular-nums; font-size: 8.5pt; }
+  .lumi-imprimible thead { display: table-header-group; }   /* el encabezado se repite en cada página */
+  .lumi-imprimible tr { break-inside: avoid; }
+  .lumi-imprimible th, .lumi-imprimible td { border: 0.5pt solid #999; padding: 2pt 3pt; text-align: left; vertical-align: top; }
+  .lumi-imprimible th { background: #eee !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .lumi-imprimible-pie { margin-top: 10pt; font-size: 8pt; color: #444; }
+}
+
+/* Iteración 2 · F5: si la fuente de íconos no carga (sin conexión), el ícono se ve como su nombre en texto
+   ("download", "visibility") y empujaba la página a 360 px. Cada ícono ocupa siempre un cuadrado de 1em. */
+.material-symbols-outlined { display: inline-block; width: 1em; height: 1em; line-height: 1; overflow: hidden; flex-shrink: 0; }
